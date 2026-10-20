@@ -1,0 +1,36 @@
+# Written by the licensemanager SDK release script: changes made here are overwritten.
+# Publishes the package to npm when a version tag is pushed, with npm trusted publishing (OIDC): no token needed.
+name: Publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Check the version isn't published yet
+        id: check
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.published != 'true'
+        run: npm install --no-audit --no-fund
+      # Trusted publishing needs npm 11.5.1 or later (bundled with Node 24), and generates the provenance attestation.
+      - if: steps.check.outputs.published != 'true'
+        run: npm publish --access public
