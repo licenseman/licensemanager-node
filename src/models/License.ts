@@ -13,6 +13,20 @@
  */
 
 import { mapValues, parseDate, parseDateTime, serializeDate, serializeDateTime } from '../runtime.js';
+import type { CancellationReason } from './CancellationReason.js';
+import {
+    CancellationReasonFromJSON,
+    CancellationReasonFromJSONTyped,
+    CancellationReasonToJSON,
+    CancellationReasonToJSONTyped,
+} from './CancellationReason.js';
+import type { LicenseCustomer } from './LicenseCustomer.js';
+import {
+    LicenseCustomerFromJSON,
+    LicenseCustomerFromJSONTyped,
+    LicenseCustomerToJSON,
+    LicenseCustomerToJSONTyped,
+} from './LicenseCustomer.js';
 import type { LicenseMaxVersion } from './LicenseMaxVersion.js';
 import {
     LicenseMaxVersionFromJSON,
@@ -34,6 +48,13 @@ import {
     LicenseStatusToJSON,
     LicenseStatusToJSONTyped,
 } from './LicenseStatus.js';
+import type { LicenseSubscription } from './LicenseSubscription.js';
+import {
+    LicenseSubscriptionFromJSON,
+    LicenseSubscriptionFromJSONTyped,
+    LicenseSubscriptionToJSON,
+    LicenseSubscriptionToJSONTyped,
+} from './LicenseSubscription.js';
 
 /**
  * 
@@ -57,6 +78,10 @@ export interface License {
      * 
      */
     customerId: string;
+    /**
+     * 
+     */
+    customer: LicenseCustomer;
     /**
      * Unique within the product. Case sensitive: `validateKey` compares keys exactly.
      */
@@ -106,6 +131,30 @@ export interface License {
      */
     status: LicenseStatus;
     /**
+     * End of the money back guarantee: until then, the customer can cancel the license from the customer portal, or with a token. Set from the policy's `moneyBackGuaranteeDays` when the license is created. `null` when the customer can't cancel it.
+     */
+    cancellableUntil: Date | null;
+    /**
+     * When the license was canceled: validating its key fails since. `null` when it wasn't.
+     */
+    canceledAt: Date | null;
+    /**
+     * Why the license was canceled. `null` when it wasn't.
+     */
+    cancellationReason: CancellationReason | null;
+    /**
+     * 
+     */
+    subscription: LicenseSubscription | null;
+    /**
+     * Comment given when the license was canceled. `null` when there's none.
+     */
+    cancellationComment: string | null;
+    /**
+     * Id of the Stripe refund of the license's payment once it was canceled, through the Stripe integration. `null` otherwise.
+     */
+    stripeRefundId: string | null;
+    /**
      * Last time the license's settings were edited, not when its key was validated.
      */
     updatedAt: Date;
@@ -121,6 +170,7 @@ export function instanceOfLicense(value: object): value is License {
     if (!('productId' in value) || value['productId'] === undefined) return false;
     if (!('policyId' in value) || value['policyId'] === undefined) return false;
     if (!('customerId' in value) || value['customerId'] === undefined) return false;
+    if (!('customer' in value) || value['customer'] === undefined) return false;
     if (!('key' in value) || value['key'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('expiresAt' in value) || value['expiresAt'] === undefined) return false;
@@ -133,6 +183,12 @@ export function instanceOfLicense(value: object): value is License {
     if (!('maxVersion' in value) || value['maxVersion'] === undefined) return false;
     if (!('price' in value) || value['price'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
+    if (!('cancellableUntil' in value) || value['cancellableUntil'] === undefined) return false;
+    if (!('canceledAt' in value) || value['canceledAt'] === undefined) return false;
+    if (!('cancellationReason' in value) || value['cancellationReason'] === undefined) return false;
+    if (!('subscription' in value) || value['subscription'] === undefined) return false;
+    if (!('cancellationComment' in value) || value['cancellationComment'] === undefined) return false;
+    if (!('stripeRefundId' in value) || value['stripeRefundId'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
 }
@@ -151,6 +207,7 @@ export function LicenseFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
         'productId': json['productId'],
         'policyId': json['policyId'],
         'customerId': json['customerId'],
+        'customer': LicenseCustomerFromJSON(json['customer']),
         'key': json['key'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
         'expiresAt': (json['expiresAt'] == null ? null : parseDateTime(json['expiresAt'])),
@@ -163,6 +220,12 @@ export function LicenseFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
         'maxVersion': LicenseMaxVersionFromJSON(json['maxVersion']),
         'price': PriceFromJSON(json['price']),
         'status': LicenseStatusFromJSON(json['status']),
+        'cancellableUntil': (json['cancellableUntil'] == null ? null : parseDateTime(json['cancellableUntil'])),
+        'canceledAt': (json['canceledAt'] == null ? null : parseDateTime(json['canceledAt'])),
+        'cancellationReason': CancellationReasonFromJSON(json['cancellationReason']),
+        'subscription': LicenseSubscriptionFromJSON(json['subscription']),
+        'cancellationComment': json['cancellationComment'],
+        'stripeRefundId': json['stripeRefundId'],
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
     };
 }
@@ -182,6 +245,7 @@ export function LicenseToJSONTyped(value?: License | null, ignoreDiscriminator: 
         'productId': value['productId'],
         'policyId': value['policyId'],
         'customerId': value['customerId'],
+        'customer': LicenseCustomerToJSON(value['customer']),
         'key': value['key'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
         'expiresAt': value['expiresAt'] == null ? value['expiresAt'] : serializeDateTime(value['expiresAt']),
@@ -194,6 +258,12 @@ export function LicenseToJSONTyped(value?: License | null, ignoreDiscriminator: 
         'maxVersion': LicenseMaxVersionToJSON(value['maxVersion']),
         'price': PriceToJSON(value['price']),
         'status': LicenseStatusToJSON(value['status']),
+        'cancellableUntil': value['cancellableUntil'] == null ? value['cancellableUntil'] : serializeDateTime(value['cancellableUntil']),
+        'canceledAt': value['canceledAt'] == null ? value['canceledAt'] : serializeDateTime(value['canceledAt']),
+        'cancellationReason': CancellationReasonToJSON(value['cancellationReason']),
+        'subscription': LicenseSubscriptionToJSON(value['subscription']),
+        'cancellationComment': value['cancellationComment'],
+        'stripeRefundId': value['stripeRefundId'],
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),
     };
 }

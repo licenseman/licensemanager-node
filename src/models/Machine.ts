@@ -40,13 +40,17 @@ export interface Machine {
      */
     name: string | null;
     /**
-     * Whether the machine counts as using the license.
+     * Whether the machine counts as using the license. A `locked` machine doesn't, and its validations are refused with `machine_locked`: it overrode a machine that came back. See `validateKey`.
      */
     status: MachineStatusEnum;
     /**
      * Version of the application last validated on the machine.
      */
     version: string | null;
+    /**
+     * For a machine deactivated or locked by automatic machine changes, the machine that took its place. Validating the key on a deactivated machine that has one takes its place back. `null` otherwise.
+     */
+    overriddenByMachineId: string | null;
     /**
      * When the license was last validated on the machine.
      */
@@ -68,6 +72,7 @@ export interface Machine {
 export const MachineStatusEnum = {
     Active: 'active',
     Deactivated: 'deactivated',
+    Locked: 'locked',
     UnknownDefaultOpenApi: '11184809',
 } as const;
 export type MachineStatusEnum = typeof MachineStatusEnum[keyof typeof MachineStatusEnum];
@@ -84,6 +89,7 @@ export function instanceOfMachine(value: object): value is Machine {
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('version' in value) || value['version'] === undefined) return false;
+    if (!('overriddenByMachineId' in value) || value['overriddenByMachineId'] === undefined) return false;
     if (!('lastValidatedAt' in value) || value['lastValidatedAt'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
@@ -107,6 +113,7 @@ export function MachineFromJSONTyped(json: any, ignoreDiscriminator: boolean): M
         'name': json['name'],
         'status': json['status'],
         'version': json['version'],
+        'overriddenByMachineId': json['overriddenByMachineId'],
         'lastValidatedAt': (json['lastValidatedAt'] == null ? null : parseDateTime(json['lastValidatedAt'])),
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
@@ -131,6 +138,7 @@ export function MachineToJSONTyped(value?: Machine | null, ignoreDiscriminator: 
         'name': value['name'],
         'status': value['status'],
         'version': value['version'],
+        'overriddenByMachineId': value['overriddenByMachineId'],
         'lastValidatedAt': value['lastValidatedAt'] == null ? value['lastValidatedAt'] : serializeDateTime(value['lastValidatedAt']),
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),

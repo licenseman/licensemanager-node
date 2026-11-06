@@ -9,6 +9,7 @@ Name | Type
 `name` | string
 `slug` | string
 `portal` | [UpdateProductPortal](UpdateProductPortal.md)
+`autoMachineChange` | boolean
 
 ## Example
 
@@ -20,6 +21,7 @@ const example = {
   "name": Acme Pro,
   "slug": acme-pro,
   "portal": null,
+  "autoMachineChange": true,
 } satisfies UpdateProduct
 
 console.log(example)

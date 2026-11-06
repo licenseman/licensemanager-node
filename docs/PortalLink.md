@@ -17,7 +17,7 @@ import type { PortalLink } from '@licenseman/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
-  "url": https://app.example.com/portal/x7Kp2QaZ?token=eyJhbGciOi…,
+  "url": https://app.licensemanager.dev/portal/x7Kp2QaZ?token=eyJhbGciOi…,
   "token": eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…,
   "expiresAt": 2026-01-22T09:30:00.000Z,
 } satisfies PortalLink

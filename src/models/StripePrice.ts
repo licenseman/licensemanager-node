@@ -20,6 +20,13 @@ import {
     PriceToJSON,
     PriceToJSONTyped,
 } from './Price.js';
+import type { StripePriceRecurring } from './StripePriceRecurring.js';
+import {
+    StripePriceRecurringFromJSON,
+    StripePriceRecurringFromJSONTyped,
+    StripePriceRecurringToJSON,
+    StripePriceRecurringToJSONTyped,
+} from './StripePriceRecurring.js';
 
 /**
  * 
@@ -48,6 +55,10 @@ export interface StripePrice {
      */
     price: Price | null;
     /**
+     * 
+     */
+    recurring: StripePriceRecurring | null;
+    /**
      * Whether the price already creates licenses of a product.
      */
     mapped: boolean;
@@ -62,6 +73,7 @@ export function instanceOfStripePrice(value: object): value is StripePrice {
     if (!('productName' in value) || value['productName'] === undefined) return false;
     if (!('nickname' in value) || value['nickname'] === undefined) return false;
     if (!('price' in value) || value['price'] === undefined) return false;
+    if (!('recurring' in value) || value['recurring'] === undefined) return false;
     if (!('mapped' in value) || value['mapped'] === undefined) return false;
     return true;
 }
@@ -81,6 +93,7 @@ export function StripePriceFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'productName': json['productName'],
         'nickname': json['nickname'],
         'price': PriceFromJSON(json['price']),
+        'recurring': StripePriceRecurringFromJSON(json['recurring']),
         'mapped': json['mapped'],
     };
 }
@@ -101,6 +114,7 @@ export function StripePriceToJSONTyped(value?: StripePrice | null, ignoreDiscrim
         'productName': value['productName'],
         'nickname': value['nickname'],
         'price': PriceToJSON(value['price']),
+        'recurring': StripePriceRecurringToJSON(value['recurring']),
         'mapped': value['mapped'],
     };
 }

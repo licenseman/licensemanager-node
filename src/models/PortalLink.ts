@@ -24,7 +24,7 @@ export interface PortalLink {
      */
     url: string;
     /**
-     * Customer token in the link, with the `customer:read`, `license:read` and `machine:write` permissions.
+     * Customer token in the link, with the `customer:read`, `license:read`, `license:cancel` and `machine:write` permissions.
      */
     token: string;
     /**

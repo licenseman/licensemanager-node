@@ -13,6 +13,13 @@
  */
 
 import { mapValues, parseDate, parseDateTime, serializeDate, serializeDateTime } from '../runtime.js';
+import type { IntegrationMappingRecurring } from './IntegrationMappingRecurring.js';
+import {
+    IntegrationMappingRecurringFromJSON,
+    IntegrationMappingRecurringFromJSONTyped,
+    IntegrationMappingRecurringToJSON,
+    IntegrationMappingRecurringToJSONTyped,
+} from './IntegrationMappingRecurring.js';
 import type { Price } from './Price.js';
 import {
     PriceFromJSON,
@@ -60,6 +67,10 @@ export interface IntegrationMapping {
      */
     price: Price | null;
     /**
+     * 
+     */
+    recurring: IntegrationMappingRecurring | null;
+    /**
      * `error` when the price can no longer be paid, explained by `statusReason`.
      */
     status: IntegrationMappingStatusEnum;
@@ -97,6 +108,7 @@ export function instanceOfIntegrationMapping(value: object): value is Integratio
     if (!('stripePriceId' in value) || value['stripePriceId'] === undefined) return false;
     if (!('productName' in value) || value['productName'] === undefined) return false;
     if (!('price' in value) || value['price'] === undefined) return false;
+    if (!('recurring' in value) || value['recurring'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('statusReason' in value) || value['statusReason'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
@@ -121,6 +133,7 @@ export function IntegrationMappingFromJSONTyped(json: any, ignoreDiscriminator: 
         'stripePriceId': json['stripePriceId'],
         'productName': json['productName'],
         'price': PriceFromJSON(json['price']),
+        'recurring': IntegrationMappingRecurringFromJSON(json['recurring']),
         'status': json['status'],
         'statusReason': json['statusReason'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
@@ -146,6 +159,7 @@ export function IntegrationMappingToJSONTyped(value?: IntegrationMapping | null,
         'stripePriceId': value['stripePriceId'],
         'productName': value['productName'],
         'price': PriceToJSON(value['price']),
+        'recurring': IntegrationMappingRecurringToJSON(value['recurring']),
         'status': value['status'],
         'statusReason': value['statusReason'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),

@@ -13,6 +13,7 @@ Name | Type
 `name` | string
 `status` | string
 `version` | string
+`overriddenByMachineId` | string
 `lastValidatedAt` | Date
 `createdAt` | Date
 `updatedAt` | Date
@@ -31,6 +32,7 @@ const example = {
   "name": Jane's MacBook,
   "status": active,
   "version": 1.4.2,
+  "overriddenByMachineId": null,
   "lastValidatedAt": 2026-01-15T09:30:00.000Z,
   "createdAt": 2026-01-15T09:30:00.000Z,
   "updatedAt": 2026-01-15T09:30:00.000Z,

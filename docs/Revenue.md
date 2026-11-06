@@ -1,7 +1,7 @@
 
 # Revenue
 
-Revenue of the licenses sold in one currency, each license counting on the day it was created. Licenses without a price are left out.
+Revenue in one currency: the licenses sold once, each counting on the day it was created, and the payments of the subscription licenses, each counting on the day it was paid, with the license\'s policy. Licenses without a price are left out, and so are canceled ones, but in `canceledLicenseCount` and `canceledTotal`.
 
 ## Properties
 
@@ -10,6 +10,10 @@ Name | Type
 `currency` | string
 `licenseCount` | number
 `total` | number
+`subscriptionTotal` | number
+`paymentCount` | number
+`canceledLicenseCount` | number
+`canceledTotal` | number
 `thisMonth` | number
 `lastMonth` | number
 `last30Days` | number
@@ -27,6 +31,10 @@ const example = {
   "currency": USD,
   "licenseCount": 42,
   "total": 2099.58,
+  "subscriptionTotal": 480,
+  "paymentCount": 48,
+  "canceledLicenseCount": 2,
+  "canceledTotal": 99.98,
   "thisMonth": 349.93,
   "lastMonth": 299.94,
   "last30Days": 399.92,

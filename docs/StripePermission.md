@@ -9,6 +9,8 @@ Name | Type
 `resource` | string
 `access` | string
 `reason` | string
+`optional` | boolean
+`subscriptions` | boolean
 
 ## Example
 
@@ -20,6 +22,8 @@ const example = {
   "resource": Prices,
   "access": null,
   "reason": Lists your prices so you can choose which ones create licenses, and checks they can still be paid.,
+  "optional": false,
+  "subscriptions": false,
 } satisfies StripePermission
 
 console.log(example)

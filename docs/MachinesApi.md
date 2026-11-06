@@ -16,7 +16,7 @@ All URIs are relative to *https://api.licensemanager.dev*
 
 Deactivate a machine
 
-The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated machine does nothing.  The license token &#x60;validateKey&#x60; returned to the machine isn\&#39;t revoked: the application can keep running offline until it expires. Machines can\&#39;t be deleted: they\&#39;re deleted with their license.  **Token access**: customer, license, machine tokens with the &#x60;machine:write&#x60; permission (or the matching write one). A token reaches the machine it\&#39;s scoped to, or the machines of its license or customer.  **Required role permission**: &#x60;machine:deactivate&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated or locked machine does nothing.  The license token &#x60;validateKey&#x60; returned to the machine isn\&#39;t revoked: the application can keep running offline until it expires. Machines can\&#39;t be deleted: they\&#39;re deleted with their license.  **Token access**: customer, license, machine tokens with the &#x60;machine:write&#x60; permission (or the matching write one). A token reaches the machine it\&#39;s scoped to, or the machines of its license or customer.  **Required role permission**: &#x60;machine:deactivate&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
 
 ### Example
 
@@ -208,7 +208,7 @@ async function example() {
     search: macbook,
     // string | Only returns the machine with this exact fingerprint. (optional)
     fingerprint: 4c:32:75:8f:9a:1e,
-    // 'active' | 'deactivated' | Only returns the machines with this status. (optional)
+    // 'active' | 'deactivated' | 'locked' | Only returns the machines with this status. (optional)
     status: active,
   } satisfies ListMachinesRequest;
 
@@ -235,7 +235,7 @@ example().catch(console.error);
 | **sort** | `name`, `-name`, `platform`, `-platform`, `createdAt`, `-createdAt`, `updatedAt`, `-updatedAt` | Field to sort by, prefixed with &#x60;-&#x60; for descending order. Defaults to &#x60;-createdAt&#x60;. | [Optional] [Defaults to `&#39;-createdAt&#39;`] [Enum: name, -name, platform, -platform, createdAt, -createdAt, updatedAt, -updatedAt] |
 | **search** | `string` | Case-insensitive text the fingerprint or name contains. | [Optional] [Defaults to `undefined`] |
 | **fingerprint** | `string` | Only returns the machine with this exact fingerprint. | [Optional] [Defaults to `undefined`] |
-| **status** | `active`, `deactivated` | Only returns the machines with this status. | [Optional] [Defaults to `undefined`] [Enum: active, deactivated] |
+| **status** | `active`, `deactivated`, `locked` | Only returns the machines with this status. | [Optional] [Defaults to `undefined`] [Enum: active, deactivated, locked] |
 
 ### Return type
 

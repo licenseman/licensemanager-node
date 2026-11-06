@@ -16,6 +16,11 @@ Name | Type
 `statusReason` | string
 `lastCheckedAt` | Date
 `lastEventAt` | Date
+`autoRefund` | boolean
+`canRefund` | boolean
+`canManageSubscriptions` | boolean
+`canBillingPortal` | boolean
+`subscriptionGraceDays` | number
 `createdAt` | Date
 
 ## Example
@@ -30,11 +35,16 @@ const example = {
   "livemode": null,
   "accountName": Acme Inc.,
   "apiKeyHint": rk_live_…Ab3d,
-  "webhookUrl": https://api.example.com/v1/webhooks/stripe/i8Fz4QnRt,
+  "webhookUrl": https://api.licensemanager.dev/v1/webhooks/stripe/i8Fz4QnRt,
   "status": null,
   "statusReason": The API key can't manage webhook endpoints: give it the Webhook Endpoints: Write permission,
   "lastCheckedAt": null,
   "lastEventAt": null,
+  "autoRefund": true,
+  "canRefund": true,
+  "canManageSubscriptions": true,
+  "canBillingPortal": true,
+  "subscriptionGraceDays": 7,
   "createdAt": null,
 } satisfies Integration
 

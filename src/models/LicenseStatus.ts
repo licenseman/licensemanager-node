@@ -14,13 +14,14 @@
 
 
 /**
- * `expired` when the license has expired, `active` when a machine validated its key in the last 90 days, `inactive` otherwise.
+ * `canceled` when the license was canceled, `expired` when it has expired, `active` when a machine validated its key in the last 90 days, `inactive` otherwise.
  * @export
  */
 export const LicenseStatus = {
     Active: 'active',
     Inactive: 'inactive',
     Expired: 'expired',
+    Canceled: 'canceled',
     UnknownDefaultOpenApi: '11184809',
 } as const;
 export type LicenseStatus = typeof LicenseStatus[keyof typeof LicenseStatus];

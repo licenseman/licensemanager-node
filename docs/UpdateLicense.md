@@ -12,6 +12,7 @@ Name | Type
 `maxOfflineDurationSeconds` | number
 `maxVersion` | [LicenseMaxVersionInput](LicenseMaxVersionInput.md)
 `price` | [PriceInput](PriceInput.md)
+`cancellableUntil` | Date
 
 ## Example
 
@@ -26,6 +27,7 @@ const example = {
   "maxOfflineDurationSeconds": 604800,
   "maxVersion": null,
   "price": null,
+  "cancellableUntil": 2026-02-14T09:30:00.000Z,
 } satisfies UpdateLicense
 
 console.log(example)

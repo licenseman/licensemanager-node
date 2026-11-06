@@ -27,7 +27,7 @@ const example = {
   "type": null,
   "id": i8Fz4QnRt,
   "name": Billing backend,
-  "email": jane@example.com,
+  "email": jane@licensemanager.dev,
   "image": https://example.com/jane.png,
   "start": lm_Ab3d,
   "tokenType": null,

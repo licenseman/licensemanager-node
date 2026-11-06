@@ -22,7 +22,7 @@ import {
 } from './ProductStatsNewLicensesByPolicyInner.js';
 
 /**
- * Revenue of the licenses sold in one currency, each license counting on the day it was created. Licenses without a price are left out.
+ * Revenue in one currency: the licenses sold once, each counting on the day it was created, and the payments of the subscription licenses, each counting on the day it was paid, with the license's policy. Licenses without a price are left out, and so are canceled ones, but in `canceledLicenseCount` and `canceledTotal`.
  * @export
  * @interface Revenue
  */
@@ -32,13 +32,29 @@ export interface Revenue {
      */
     currency: string;
     /**
-     * Number of licenses sold in the currency, free ones included.
+     * Number of licenses sold once in the currency, free ones included, canceled ones and subscription licenses left out.
      */
     licenseCount: number;
     /**
-     * Sum of the prices of the licenses sold in the currency, in major units.
+     * Revenue in the currency, in major units: the prices of the licenses sold once, canceled ones left out, plus the payments of the subscriptions, `subscriptionTotal`.
      */
     total: number;
+    /**
+     * Sum of the payments of the subscription licenses in the currency, before taxes, in major units.
+     */
+    subscriptionTotal: number;
+    /**
+     * Number of payments of the subscription licenses in the currency.
+     */
+    paymentCount: number;
+    /**
+     * Number of canceled licenses sold once in the currency.
+     */
+    canceledLicenseCount: number;
+    /**
+     * Sum of the prices of the canceled licenses sold once in the currency, in major units: revenue lost to cancellations.
+     */
+    canceledTotal: number;
     /**
      * Revenue of the current month, in UTC.
      */
@@ -72,6 +88,10 @@ export function instanceOfRevenue(value: object): value is Revenue {
     if (!('currency' in value) || value['currency'] === undefined) return false;
     if (!('licenseCount' in value) || value['licenseCount'] === undefined) return false;
     if (!('total' in value) || value['total'] === undefined) return false;
+    if (!('subscriptionTotal' in value) || value['subscriptionTotal'] === undefined) return false;
+    if (!('paymentCount' in value) || value['paymentCount'] === undefined) return false;
+    if (!('canceledLicenseCount' in value) || value['canceledLicenseCount'] === undefined) return false;
+    if (!('canceledTotal' in value) || value['canceledTotal'] === undefined) return false;
     if (!('thisMonth' in value) || value['thisMonth'] === undefined) return false;
     if (!('lastMonth' in value) || value['lastMonth'] === undefined) return false;
     if (!('last30Days' in value) || value['last30Days'] === undefined) return false;
@@ -94,6 +114,10 @@ export function RevenueFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
         'currency': json['currency'],
         'licenseCount': json['licenseCount'],
         'total': json['total'],
+        'subscriptionTotal': json['subscriptionTotal'],
+        'paymentCount': json['paymentCount'],
+        'canceledLicenseCount': json['canceledLicenseCount'],
+        'canceledTotal': json['canceledTotal'],
         'thisMonth': json['thisMonth'],
         'lastMonth': json['lastMonth'],
         'last30Days': json['last30Days'],
@@ -117,6 +141,10 @@ export function RevenueToJSONTyped(value?: Revenue | null, ignoreDiscriminator: 
         'currency': value['currency'],
         'licenseCount': value['licenseCount'],
         'total': value['total'],
+        'subscriptionTotal': value['subscriptionTotal'],
+        'paymentCount': value['paymentCount'],
+        'canceledLicenseCount': value['canceledLicenseCount'],
+        'canceledTotal': value['canceledTotal'],
         'thisMonth': value['thisMonth'],
         'lastMonth': value['lastMonth'],
         'last30Days': value['last30Days'],

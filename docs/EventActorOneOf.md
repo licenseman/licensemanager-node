@@ -22,7 +22,7 @@ const example = {
   "type": null,
   "id": u2Hk9PzLq,
   "name": Jane Doe,
-  "email": jane@example.com,
+  "email": jane@licensemanager.dev,
   "image": https://example.com/jane.png,
 } satisfies EventActorOneOf
 

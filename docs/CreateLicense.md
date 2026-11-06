@@ -15,6 +15,7 @@ Name | Type
 `maxOfflineDurationSeconds` | number
 `price` | [PriceInput](PriceInput.md)
 `maxVersion` | [LicenseMaxVersionInput](LicenseMaxVersionInput.md)
+`cancellableUntil` | Date
 `sendKey` | boolean
 
 ## Example
@@ -33,6 +34,7 @@ const example = {
   "maxOfflineDurationSeconds": 604800,
   "price": null,
   "maxVersion": null,
+  "cancellableUntil": 2026-02-14T09:30:00.000Z,
   "sendKey": true,
 } satisfies CreateLicense
 

@@ -55,8 +55,10 @@ export type TokenTypeEnum = typeof TokenTypeEnum[keyof typeof TokenTypeEnum];
 export const TokenScopeEnum = {
     CustomerRead: 'customer:read',
     CustomerWrite: 'customer:write',
+    CustomerBilling: 'customer:billing',
     LicenseRead: 'license:read',
     LicenseWrite: 'license:write',
+    LicenseCancel: 'license:cancel',
     MachineRead: 'machine:read',
     MachineWrite: 'machine:write',
     UnknownDefaultOpenApi: '11184809',

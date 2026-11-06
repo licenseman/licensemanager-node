@@ -15,6 +15,7 @@ Name | Type
 `maxMachines` | number
 `maxOfflineDurationSeconds` | number
 `maxVersion` | [PolicyMaxVersion](PolicyMaxVersion.md)
+`moneyBackGuaranteeDays` | number
 `licenseCount` | number
 `createdAt` | Date
 `updatedAt` | Date
@@ -35,6 +36,7 @@ const example = {
   "maxMachines": 3,
   "maxOfflineDurationSeconds": 604800,
   "maxVersion": null,
+  "moneyBackGuaranteeDays": 30,
   "licenseCount": 12,
   "createdAt": 2026-01-15T09:30:00.000Z,
   "updatedAt": 2026-01-15T09:30:00.000Z,

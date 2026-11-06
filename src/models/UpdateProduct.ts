@@ -39,6 +39,10 @@ export interface UpdateProduct {
      * 
      */
     portal?: UpdateProductPortal;
+    /**
+     * Whether a new machine validating a license already on its max machines takes the place of the license's machine validated the longest ago, rather than being refused with `machine_limit_reached`. When the replaced machine is validated again, it takes its place back and the machine that replaced it is locked. See `validateKey`.
+     */
+    autoMachineChange?: boolean;
 }
 
 /**
@@ -61,6 +65,7 @@ export function UpdateProductFromJSONTyped(json: any, ignoreDiscriminator: boole
         'name': json['name'] == null ? undefined : json['name'],
         'slug': json['slug'] == null ? undefined : json['slug'],
         'portal': json['portal'] == null ? undefined : UpdateProductPortalFromJSON(json['portal']),
+        'autoMachineChange': json['autoMachineChange'] == null ? undefined : json['autoMachineChange'],
     };
 }
 
@@ -78,6 +83,7 @@ export function UpdateProductToJSONTyped(value?: UpdateProduct | null, ignoreDis
         'name': value['name'],
         'slug': value['slug'],
         'portal': UpdateProductPortalToJSON(value['portal']),
+        'autoMachineChange': value['autoMachineChange'],
     };
 }
 

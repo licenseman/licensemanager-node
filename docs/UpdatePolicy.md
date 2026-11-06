@@ -13,6 +13,7 @@ Name | Type
 `maxMachines` | number
 `maxOfflineDurationSeconds` | number
 `maxVersion` | [PolicySettingsMaxVersion](PolicySettingsMaxVersion.md)
+`moneyBackGuaranteeDays` | number
 
 ## Example
 
@@ -28,6 +29,7 @@ const example = {
   "maxMachines": 3,
   "maxOfflineDurationSeconds": 604800,
   "maxVersion": null,
+  "moneyBackGuaranteeDays": 30,
 } satisfies UpdatePolicy
 
 console.log(example)

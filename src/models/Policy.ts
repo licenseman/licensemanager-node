@@ -71,6 +71,10 @@ export interface Policy {
      */
     maxVersion: PolicyMaxVersion | null;
     /**
+     * Number of days after their creation during which customers can cancel the licenses created with this policy, from the customer portal or with `cancelLicense`. `null` when they can't.
+     */
+    moneyBackGuaranteeDays: number | null;
+    /**
      * Number of licenses following this policy.
      */
     licenseCount: number;
@@ -97,6 +101,7 @@ export function instanceOfPolicy(value: object): value is Policy {
     if (!('maxMachines' in value) || value['maxMachines'] === undefined) return false;
     if (!('maxOfflineDurationSeconds' in value) || value['maxOfflineDurationSeconds'] === undefined) return false;
     if (!('maxVersion' in value) || value['maxVersion'] === undefined) return false;
+    if (!('moneyBackGuaranteeDays' in value) || value['moneyBackGuaranteeDays'] === undefined) return false;
     if (!('licenseCount' in value) || value['licenseCount'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
@@ -122,6 +127,7 @@ export function PolicyFromJSONTyped(json: any, ignoreDiscriminator: boolean): Po
         'maxMachines': json['maxMachines'],
         'maxOfflineDurationSeconds': json['maxOfflineDurationSeconds'],
         'maxVersion': PolicyMaxVersionFromJSON(json['maxVersion']),
+        'moneyBackGuaranteeDays': json['moneyBackGuaranteeDays'],
         'licenseCount': json['licenseCount'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
@@ -148,6 +154,7 @@ export function PolicyToJSONTyped(value?: Policy | null, ignoreDiscriminator: bo
         'maxMachines': value['maxMachines'],
         'maxOfflineDurationSeconds': value['maxOfflineDurationSeconds'],
         'maxVersion': PolicyMaxVersionToJSON(value['maxVersion']),
+        'moneyBackGuaranteeDays': value['moneyBackGuaranteeDays'],
         'licenseCount': value['licenseCount'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),

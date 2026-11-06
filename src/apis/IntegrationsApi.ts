@@ -39,15 +39,47 @@ import {
     ListStripePrices200ResponseToJSON,
 } from '../models/ListStripePrices200Response.js';
 import {
+    type SlackAuthorize,
+    SlackAuthorizeFromJSON,
+    SlackAuthorizeToJSON,
+} from '../models/SlackAuthorize.js';
+import {
+    type SlackConnection,
+    SlackConnectionFromJSON,
+    SlackConnectionToJSON,
+} from '../models/SlackConnection.js';
+import {
+    type SlackIntegration,
+    SlackIntegrationFromJSON,
+    SlackIntegrationToJSON,
+} from '../models/SlackIntegration.js';
+import {
     type StripeIntegration,
     StripeIntegrationFromJSON,
     StripeIntegrationToJSON,
 } from '../models/StripeIntegration.js';
 import {
+    type UpdateIntegration,
+    UpdateIntegrationFromJSON,
+    UpdateIntegrationToJSON,
+} from '../models/UpdateIntegration.js';
+import {
     type UpdateIntegrationMapping,
     UpdateIntegrationMappingFromJSON,
     UpdateIntegrationMappingToJSON,
 } from '../models/UpdateIntegrationMapping.js';
+import {
+    type UpdateSlackConnection,
+    UpdateSlackConnectionFromJSON,
+    UpdateSlackConnectionToJSON,
+} from '../models/UpdateSlackConnection.js';
+
+export interface AuthorizeSlackRequest {
+    /**
+     * 
+     */
+    productId: string;
+}
 
 export interface CheckIntegrationRequest {
     /**
@@ -78,6 +110,13 @@ export interface CreateStripeMappingRequest {
     createIntegrationMapping: CreateIntegrationMapping;
 }
 
+export interface DeleteSlackConnectionRequest {
+    /**
+     * 
+     */
+    id: string;
+}
+
 export interface DeleteStripeMappingRequest {
     /**
      * 
@@ -92,6 +131,13 @@ export interface DisconnectIntegrationRequest {
     id: string;
 }
 
+export interface GetSlackIntegrationRequest {
+    /**
+     * 
+     */
+    productId: string;
+}
+
 export interface GetStripeIntegrationRequest {
     /**
      * 
@@ -104,6 +150,35 @@ export interface ListStripePricesRequest {
      * 
      */
     id: string;
+}
+
+export interface TestSlackConnectionRequest {
+    /**
+     * 
+     */
+    id: string;
+}
+
+export interface UpdateIntegrationRequest {
+    /**
+     * 
+     */
+    id: string;
+    /**
+     * 
+     */
+    updateIntegration: UpdateIntegration;
+}
+
+export interface UpdateSlackConnectionRequest {
+    /**
+     * 
+     */
+    id: string;
+    /**
+     * 
+     */
+    updateSlackConnection: UpdateSlackConnection;
 }
 
 export interface UpdateStripeMappingRequest {
@@ -121,6 +196,57 @@ export interface UpdateStripeMappingRequest {
  * 
  */
 export class IntegrationsApi extends runtime.BaseAPI {
+
+    /**
+     * Creates request options for authorizeSlack without sending the request
+     */
+    async authorizeSlackRequestOpts(requestParameters: AuthorizeSlackRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling authorizeSlack().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/integrations/slack/authorize`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Returns the URL of Slack\'s consent screen, where the user picks the channel getting the product\'s notifications. Slack then redirects to the app\'s integrations page. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Start connecting a Slack channel
+     */
+    async authorizeSlackRaw(requestParameters: AuthorizeSlackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SlackAuthorize>> {
+        const requestOptions = await this.authorizeSlackRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SlackAuthorizeFromJSON(jsonValue));
+    }
+
+    /**
+     * Returns the URL of Slack\'s consent screen, where the user picks the channel getting the product\'s notifications. Slack then redirects to the app\'s integrations page. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Start connecting a Slack channel
+     */
+    async authorizeSlack(requestParameters: AuthorizeSlackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SlackAuthorize> {
+        const response = await this.authorizeSlackRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for checkIntegration without sending the request
@@ -296,6 +422,56 @@ export class IntegrationsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for deleteSlackConnection without sending the request
+     */
+    async deleteSlackConnectionRequestOpts(requestParameters: DeleteSlackConnectionRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling deleteSlackConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/slack-connections/{id}`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Stops posting to the channel and revokes the installation\'s token in Slack. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:delete` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Remove a Slack connection
+     */
+    async deleteSlackConnectionRaw(requestParameters: DeleteSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.deleteSlackConnectionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Stops posting to the channel and revokes the installation\'s token in Slack. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:delete` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Remove a Slack connection
+     */
+    async deleteSlackConnection(requestParameters: DeleteSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteSlackConnectionRaw(requestParameters, initOverrides);
+    }
+
+    /**
      * Creates request options for deleteStripeMapping without sending the request
      */
     async deleteStripeMappingRequestOpts(requestParameters: DeleteStripeMappingRequest): Promise<runtime.RequestOpts> {
@@ -393,6 +569,57 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async disconnectIntegration(requestParameters: DisconnectIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.disconnectIntegrationRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for getSlackIntegration without sending the request
+     */
+    async getSlackIntegrationRequestOpts(requestParameters: GetSlackIntegrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling getSlackIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/integrations/slack`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Slack channels getting notifications about the product\'s licenses: purchases, renewals, failed payments and cancellations. Doesn\'t accept tokens: only API keys and sessions.
+     * Get the Slack integration of a product
+     */
+    async getSlackIntegrationRaw(requestParameters: GetSlackIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SlackIntegration>> {
+        const requestOptions = await this.getSlackIntegrationRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SlackIntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Slack channels getting notifications about the product\'s licenses: purchases, renewals, failed payments and cancellations. Doesn\'t accept tokens: only API keys and sessions.
+     * Get the Slack integration of a product
+     */
+    async getSlackIntegration(requestParameters: GetSlackIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SlackIntegration> {
+        const response = await this.getSlackIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -494,6 +721,179 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async listStripePrices(requestParameters: ListStripePricesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListStripePrices200Response> {
         const response = await this.listStripePricesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for testSlackConnection without sending the request
+     */
+    async testSlackConnectionRequestOpts(requestParameters: TestSlackConnectionRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling testSlackConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/slack-connections/{id}/test`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Posts a message to the channel, to check it gets the notifications. Marks the connection `revoked` when Slack says it won\'t work again. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Send a test message to a Slack channel
+     */
+    async testSlackConnectionRaw(requestParameters: TestSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SlackConnection>> {
+        const requestOptions = await this.testSlackConnectionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SlackConnectionFromJSON(jsonValue));
+    }
+
+    /**
+     * Posts a message to the channel, to check it gets the notifications. Marks the connection `revoked` when Slack says it won\'t work again. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Send a test message to a Slack channel
+     */
+    async testSlackConnection(requestParameters: TestSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SlackConnection> {
+        const response = await this.testSlackConnectionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updateIntegration without sending the request
+     */
+    async updateIntegrationRequestOpts(requestParameters: UpdateIntegrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateIntegration().'
+            );
+        }
+
+        if (requestParameters['updateIntegration'] == null) {
+            throw new runtime.RequiredError(
+                'updateIntegration',
+                'Required parameter "updateIntegration" was null or undefined when calling updateIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/integrations/{id}`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateIntegrationToJSON(requestParameters['updateIntegration']),
+        };
+    }
+
+    /**
+     * Changes the settings of the integration, for every product of its mode. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Update an integration
+     */
+    async updateIntegrationRaw(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Integration>> {
+        const requestOptions = await this.updateIntegrationRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes the settings of the integration, for every product of its mode. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Update an integration
+     */
+    async updateIntegration(requestParameters: UpdateIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Integration> {
+        const response = await this.updateIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updateSlackConnection without sending the request
+     */
+    async updateSlackConnectionRequestOpts(requestParameters: UpdateSlackConnectionRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling updateSlackConnection().'
+            );
+        }
+
+        if (requestParameters['updateSlackConnection'] == null) {
+            throw new runtime.RequiredError(
+                'updateSlackConnection',
+                'Required parameter "updateSlackConnection" was null or undefined when calling updateSlackConnection().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/slack-connections/{id}`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSlackConnectionToJSON(requestParameters['updateSlackConnection']),
+        };
+    }
+
+    /**
+     * Changes the notifications the channel gets. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Update a Slack connection
+     */
+    async updateSlackConnectionRaw(requestParameters: UpdateSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SlackConnection>> {
+        const requestOptions = await this.updateSlackConnectionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SlackConnectionFromJSON(jsonValue));
+    }
+
+    /**
+     * Changes the notifications the channel gets. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Update a Slack connection
+     */
+    async updateSlackConnection(requestParameters: UpdateSlackConnectionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SlackConnection> {
+        const response = await this.updateSlackConnectionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

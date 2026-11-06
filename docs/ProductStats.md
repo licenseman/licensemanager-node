@@ -21,6 +21,8 @@ Name | Type
 `newLicensesByDay` | Array&lt;number&gt;
 `newLicensesByMonth` | Array&lt;number&gt;
 `newLicensesByPolicy` | [Array&lt;ProductStatsNewLicensesByPolicyInner&gt;](ProductStatsNewLicensesByPolicyInner.md)
+`cancellation` | [CancellationStats](CancellationStats.md)
+`subscriptions` | [SubscriptionStats](SubscriptionStats.md)
 `revenue` | [Array&lt;Revenue&gt;](Revenue.md)
 `activationsByVersion` | [Array&lt;ProductStatsActivationsByVersionInner&gt;](ProductStatsActivationsByVersionInner.md)
 `activeMachinesByVersion` | [Array&lt;ProductStatsActiveMachinesByVersionInner&gt;](ProductStatsActiveMachinesByVersionInner.md)
@@ -48,6 +50,8 @@ const example = {
   "newLicensesByDay": [0, 2, 1],
   "newLicensesByMonth": [4, 9, 12],
   "newLicensesByPolicy": null,
+  "cancellation": null,
+  "subscriptions": null,
   "revenue": null,
   "activationsByVersion": null,
   "activeMachinesByVersion": null,

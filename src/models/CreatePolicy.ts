@@ -62,6 +62,10 @@ export interface CreatePolicy {
      * 
      */
     maxVersion?: PolicySettingsMaxVersion | null;
+    /**
+     * Number of days after their creation during which customers can cancel the licenses created with this policy, from the customer portal or with `cancelLicense`, which refunds their Stripe payment. Each license keeps the end of its own period as `cancellableUntil`. `null` for no money back guarantee. Defaults to `null`.
+     */
+    moneyBackGuaranteeDays?: number | null;
 }
 
 /**
@@ -89,6 +93,7 @@ export function CreatePolicyFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'maxMachines': json['maxMachines'] === undefined ? undefined : json['maxMachines'] === null ? null : json['maxMachines'],
         'maxOfflineDurationSeconds': json['maxOfflineDurationSeconds'] == null ? undefined : json['maxOfflineDurationSeconds'],
         'maxVersion': json['maxVersion'] === undefined ? undefined : json['maxVersion'] === null ? null : PolicySettingsMaxVersionFromJSON(json['maxVersion']),
+        'moneyBackGuaranteeDays': json['moneyBackGuaranteeDays'] === undefined ? undefined : json['moneyBackGuaranteeDays'] === null ? null : json['moneyBackGuaranteeDays'],
     };
 }
 
@@ -110,6 +115,7 @@ export function CreatePolicyToJSONTyped(value?: CreatePolicy | null, ignoreDiscr
         'maxMachines': value['maxMachines'],
         'maxOfflineDurationSeconds': value['maxOfflineDurationSeconds'],
         'maxVersion': PolicySettingsMaxVersionToJSON(value['maxVersion']),
+        'moneyBackGuaranteeDays': value['moneyBackGuaranteeDays'],
     };
 }
 

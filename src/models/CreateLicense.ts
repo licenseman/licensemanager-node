@@ -71,6 +71,10 @@ export interface CreateLicense {
      */
     maxVersion?: LicenseMaxVersionInput;
     /**
+     * End of the money back guarantee: until then, the customer can cancel the license from the customer portal, or with a token. `null` to not let them. Defaults to the creation date plus the policy's `moneyBackGuaranteeDays`, or `null` when it has none.
+     */
+    cancellableUntil?: Date | null;
+    /**
      * `true` emails the key to the customer once the license is created, like `sendLicenseKeys`. Sent in the background: a failed email doesn't fail the creation. In test products, it's only sent when the customer's email is a member's of the organization. Defaults to `false`.
      */
     sendKey?: boolean;
@@ -103,6 +107,7 @@ export function CreateLicenseFromJSONTyped(json: any, ignoreDiscriminator: boole
         'maxOfflineDurationSeconds': json['maxOfflineDurationSeconds'] == null ? undefined : json['maxOfflineDurationSeconds'],
         'price': json['price'] === undefined ? undefined : json['price'] === null ? null : PriceInputFromJSON(json['price']),
         'maxVersion': json['maxVersion'] == null ? undefined : LicenseMaxVersionInputFromJSON(json['maxVersion']),
+        'cancellableUntil': json['cancellableUntil'] === undefined ? undefined : json['cancellableUntil'] === null ? null : (parseDateTime(json['cancellableUntil'])),
         'sendKey': json['sendKey'] == null ? undefined : json['sendKey'],
     };
 }
@@ -127,6 +132,7 @@ export function CreateLicenseToJSONTyped(value?: CreateLicense | null, ignoreDis
         'maxOfflineDurationSeconds': value['maxOfflineDurationSeconds'],
         'price': PriceInputToJSON(value['price']),
         'maxVersion': LicenseMaxVersionInputToJSON(value['maxVersion']),
+        'cancellableUntil': value['cancellableUntil'] == null ? value['cancellableUntil'] : serializeDateTime(value['cancellableUntil']),
         'sendKey': value['sendKey'],
     };
 }

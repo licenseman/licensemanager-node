@@ -20,7 +20,7 @@ import { mapValues } from '../runtime.js';
  */
 export interface CreateToken {
     /**
-     * Permissions of the token. A write permission implies the matching read one. A token creating a token can only give the permissions it has.
+     * Permissions of the token. A write permission implies the other ones of its resource, like the read one: `license:write` implies `license:read` and `license:cancel`. A token creating a token can only give the permissions it has.
      */
     scope: Array<CreateTokenScopeEnum>;
     /**
@@ -36,8 +36,10 @@ export interface CreateToken {
 export const CreateTokenScopeEnum = {
     CustomerRead: 'customer:read',
     CustomerWrite: 'customer:write',
+    CustomerBilling: 'customer:billing',
     LicenseRead: 'license:read',
     LicenseWrite: 'license:write',
+    LicenseCancel: 'license:cancel',
     MachineRead: 'machine:read',
     MachineWrite: 'machine:write',
     UnknownDefaultOpenApi: '11184809',

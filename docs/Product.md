@@ -12,6 +12,7 @@ Name | Type
 `isTestFromProductId` | string
 `logoUrl` | string
 `portal` | [PortalSettings](PortalSettings.md)
+`autoMachineChange` | boolean
 `createdAt` | Date
 `updatedAt` | Date
 
@@ -28,6 +29,7 @@ const example = {
   "isTestFromProductId": null,
   "logoUrl": https://cdn.example.com/logos/x7Kp2QaZ/k3f9a2LpQ7xw.webp,
   "portal": null,
+  "autoMachineChange": true,
   "createdAt": 2026-01-15T09:30:00.000Z,
   "updatedAt": 2026-01-15T09:30:00.000Z,
 } satisfies Product

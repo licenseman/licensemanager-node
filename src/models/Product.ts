@@ -52,6 +52,10 @@ export interface Product {
      */
     portal: PortalSettings;
     /**
+     * Whether a new machine validating a license already on its max machines takes the place of the license's machine validated the longest ago, rather than being refused with `machine_limit_reached`. When the replaced machine is validated again, it takes its place back and the machine that replaced it is locked. See `validateKey`.
+     */
+    autoMachineChange: boolean;
+    /**
      * 
      */
     createdAt: Date;
@@ -71,6 +75,7 @@ export function instanceOfProduct(value: object): value is Product {
     if (!('isTestFromProductId' in value) || value['isTestFromProductId'] === undefined) return false;
     if (!('logoUrl' in value) || value['logoUrl'] === undefined) return false;
     if (!('portal' in value) || value['portal'] === undefined) return false;
+    if (!('autoMachineChange' in value) || value['autoMachineChange'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
@@ -92,6 +97,7 @@ export function ProductFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'isTestFromProductId': json['isTestFromProductId'],
         'logoUrl': json['logoUrl'],
         'portal': PortalSettingsFromJSON(json['portal']),
+        'autoMachineChange': json['autoMachineChange'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
     };
@@ -114,6 +120,7 @@ export function ProductToJSONTyped(value?: Product | null, ignoreDiscriminator: 
         'isTestFromProductId': value['isTestFromProductId'],
         'logoUrl': value['logoUrl'],
         'portal': PortalSettingsToJSON(value['portal']),
+        'autoMachineChange': value['autoMachineChange'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),
     };

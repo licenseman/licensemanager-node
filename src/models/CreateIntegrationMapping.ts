@@ -20,7 +20,7 @@ import { mapValues } from '../runtime.js';
  */
 export interface CreateIntegrationMapping {
     /**
-     * Active one-time price of the Stripe account.
+     * Active one-time or licensed recurring price of the Stripe account.
      */
     stripePriceId: string;
     /**

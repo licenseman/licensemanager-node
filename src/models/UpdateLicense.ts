@@ -58,6 +58,10 @@ export interface UpdateLicense {
      * 
      */
     price?: PriceInput | null;
+    /**
+     * End of the money back guarantee: until then, the customer can cancel the license from the customer portal, or with a token. `null` to not let them.
+     */
+    cancellableUntil?: Date | null;
 }
 
 /**
@@ -83,6 +87,7 @@ export function UpdateLicenseFromJSONTyped(json: any, ignoreDiscriminator: boole
         'maxOfflineDurationSeconds': json['maxOfflineDurationSeconds'] == null ? undefined : json['maxOfflineDurationSeconds'],
         'maxVersion': json['maxVersion'] == null ? undefined : LicenseMaxVersionInputFromJSON(json['maxVersion']),
         'price': json['price'] === undefined ? undefined : json['price'] === null ? null : PriceInputFromJSON(json['price']),
+        'cancellableUntil': json['cancellableUntil'] === undefined ? undefined : json['cancellableUntil'] === null ? null : (parseDateTime(json['cancellableUntil'])),
     };
 }
 
@@ -103,6 +108,7 @@ export function UpdateLicenseToJSONTyped(value?: UpdateLicense | null, ignoreDis
         'maxOfflineDurationSeconds': value['maxOfflineDurationSeconds'],
         'maxVersion': LicenseMaxVersionInputToJSON(value['maxVersion']),
         'price': PriceInputToJSON(value['price']),
+        'cancellableUntil': value['cancellableUntil'] == null ? value['cancellableUntil'] : serializeDateTime(value['cancellableUntil']),
     };
 }
 

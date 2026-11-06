@@ -1,8 +1,8 @@
 {
   "name": "@licenseman/sdk",
-  "version": "0.1.1",
-  "description": "OpenAPI client for @licenseman/sdk",
-  "author": "OpenAPI-Generator",
+  "version": "0.2.0",
+  "description": "TypeScript client for the LicenseManager API: products, policies, customers, licenses, machines and releases.",
+  "author": "LicenseManager",
   "repository": {
     "type": "git",
     "url": "https://github.com/licenseman/licensemanager-node.git"
@@ -17,5 +17,17 @@
   },
   "devDependencies": {
     "typescript": "^4.0 || ^5.0"
-  }
+  },
+  "homepage": "https://licensemanager.dev/docs/sdks/typescript",
+  "bugs": {
+    "url": "https://github.com/licenseman/licensemanager-node/issues"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "licensemanager",
+    "licensing",
+    "license-keys",
+    "api",
+    "sdk"
+  ]
 }

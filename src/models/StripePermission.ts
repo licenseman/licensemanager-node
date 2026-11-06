@@ -31,6 +31,14 @@ export interface StripePermission {
      * 
      */
     reason: string;
+    /**
+     * Whether the key can connect without it, losing what it's for, explained by `reason`.
+     */
+    optional: boolean;
+    /**
+     * Whether it's only needed to sell subscriptions: checked once a recurring price is mapped.
+     */
+    subscriptions: boolean;
 }
 
 
@@ -52,6 +60,8 @@ export function instanceOfStripePermission(value: object): value is StripePermis
     if (!('resource' in value) || value['resource'] === undefined) return false;
     if (!('access' in value) || value['access'] === undefined) return false;
     if (!('reason' in value) || value['reason'] === undefined) return false;
+    if (!('optional' in value) || value['optional'] === undefined) return false;
+    if (!('subscriptions' in value) || value['subscriptions'] === undefined) return false;
     return true;
 }
 
@@ -68,6 +78,8 @@ export function StripePermissionFromJSONTyped(json: any, ignoreDiscriminator: bo
         'resource': json['resource'],
         'access': json['access'],
         'reason': json['reason'],
+        'optional': json['optional'],
+        'subscriptions': json['subscriptions'],
     };
 }
 
@@ -85,6 +97,8 @@ export function StripePermissionToJSONTyped(value?: StripePermission | null, ign
         'resource': value['resource'],
         'access': value['access'],
         'reason': value['reason'],
+        'optional': value['optional'],
+        'subscriptions': value['subscriptions'],
     };
 }
 

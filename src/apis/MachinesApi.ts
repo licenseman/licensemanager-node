@@ -114,7 +114,7 @@ export class MachinesApi extends runtime.BaseAPI {
     }
 
     /**
-     * The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated machine does nothing.  The license token `validateKey` returned to the machine isn\'t revoked: the application can keep running offline until it expires. Machines can\'t be deleted: they\'re deleted with their license.  **Token access**: customer, license, machine tokens with the `machine:write` permission (or the matching write one). A token reaches the machine it\'s scoped to, or the machines of its license or customer.  **Required role permission**: `machine:deactivate` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated or locked machine does nothing.  The license token `validateKey` returned to the machine isn\'t revoked: the application can keep running offline until it expires. Machines can\'t be deleted: they\'re deleted with their license.  **Token access**: customer, license, machine tokens with the `machine:write` permission (or the matching write one). A token reaches the machine it\'s scoped to, or the machines of its license or customer.  **Required role permission**: `machine:deactivate` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
      * Deactivate a machine
      */
     async deactivateMachineRaw(requestParameters: DeactivateMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Machine>> {
@@ -125,7 +125,7 @@ export class MachinesApi extends runtime.BaseAPI {
     }
 
     /**
-     * The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated machine does nothing.  The license token `validateKey` returned to the machine isn\'t revoked: the application can keep running offline until it expires. Machines can\'t be deleted: they\'re deleted with their license.  **Token access**: customer, license, machine tokens with the `machine:write` permission (or the matching write one). A token reaches the machine it\'s scoped to, or the machines of its license or customer.  **Required role permission**: `machine:deactivate` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * The machine no longer counts as using the license, freeing its place when the license has a maximum number of machines. Validating the license key on the machine activates it again, unless the license is on its maximum number of machines by then. Deactivating a deactivated or locked machine does nothing.  The license token `validateKey` returned to the machine isn\'t revoked: the application can keep running offline until it expires. Machines can\'t be deleted: they\'re deleted with their license.  **Token access**: customer, license, machine tokens with the `machine:write` permission (or the matching write one). A token reaches the machine it\'s scoped to, or the machines of its license or customer.  **Required role permission**: `machine:deactivate` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
      * Deactivate a machine
      */
     async deactivateMachine(requestParameters: DeactivateMachineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Machine> {
@@ -298,6 +298,7 @@ export type ListMachinesSortEnum = typeof ListMachinesSortEnum[keyof typeof List
 export const ListMachinesStatusEnum = {
     Active: 'active',
     Deactivated: 'deactivated',
+    Locked: 'locked',
     UnknownDefaultOpenApi: '11184809',
 } as const;
 export type ListMachinesStatusEnum = typeof ListMachinesStatusEnum[keyof typeof ListMachinesStatusEnum];

@@ -68,6 +68,26 @@ export interface Integration {
      */
     lastEventAt: Date | null;
     /**
+     * Whether canceling a license bought through Stripe refunds its payment. On by default, always off when `canRefund` is false.
+     */
+    autoRefund: boolean;
+    /**
+     * Whether the API key has the optional Refunds: Write permission, checked when connecting and every day. Without it, canceled licenses aren't refunded: refund their payments from Stripe.
+     */
+    canRefund: boolean;
+    /**
+     * Whether the API key has the optional Subscriptions: Write permission, checked when connecting and every day. Without it, subscription licenses can't be canceled from the app: cancel their subscriptions from Stripe.
+     */
+    canManageSubscriptions: boolean;
+    /**
+     * Whether the API key has the optional Customer portal: Write permission, checked when connecting and every day. Without it, the license portal doesn't link to the Stripe customer portal.
+     */
+    canBillingPortal: boolean;
+    /**
+     * Days a subscription license stays valid after its period ends while its renewal is unpaid, as Stripe retries the payment. 7 by default.
+     */
+    subscriptionGraceDays: number;
+    /**
      * 
      */
     createdAt: Date;
@@ -100,6 +120,11 @@ export function instanceOfIntegration(value: object): value is Integration {
     if (!('statusReason' in value) || value['statusReason'] === undefined) return false;
     if (!('lastCheckedAt' in value) || value['lastCheckedAt'] === undefined) return false;
     if (!('lastEventAt' in value) || value['lastEventAt'] === undefined) return false;
+    if (!('autoRefund' in value) || value['autoRefund'] === undefined) return false;
+    if (!('canRefund' in value) || value['canRefund'] === undefined) return false;
+    if (!('canManageSubscriptions' in value) || value['canManageSubscriptions'] === undefined) return false;
+    if (!('canBillingPortal' in value) || value['canBillingPortal'] === undefined) return false;
+    if (!('subscriptionGraceDays' in value) || value['subscriptionGraceDays'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     return true;
 }
@@ -124,6 +149,11 @@ export function IntegrationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'statusReason': json['statusReason'],
         'lastCheckedAt': (json['lastCheckedAt'] == null ? null : parseDateTime(json['lastCheckedAt'])),
         'lastEventAt': (json['lastEventAt'] == null ? null : parseDateTime(json['lastEventAt'])),
+        'autoRefund': json['autoRefund'],
+        'canRefund': json['canRefund'],
+        'canManageSubscriptions': json['canManageSubscriptions'],
+        'canBillingPortal': json['canBillingPortal'],
+        'subscriptionGraceDays': json['subscriptionGraceDays'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
     };
 }
@@ -149,6 +179,11 @@ export function IntegrationToJSONTyped(value?: Integration | null, ignoreDiscrim
         'statusReason': value['statusReason'],
         'lastCheckedAt': value['lastCheckedAt'] == null ? value['lastCheckedAt'] : serializeDateTime(value['lastCheckedAt']),
         'lastEventAt': value['lastEventAt'] == null ? value['lastEventAt'] : serializeDateTime(value['lastEventAt']),
+        'autoRefund': value['autoRefund'],
+        'canRefund': value['canRefund'],
+        'canManageSubscriptions': value['canManageSubscriptions'],
+        'canBillingPortal': value['canBillingPortal'],
+        'subscriptionGraceDays': value['subscriptionGraceDays'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
     };
 }

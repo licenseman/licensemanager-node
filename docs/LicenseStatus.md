@@ -1,7 +1,7 @@
 
 # LicenseStatus
 
-`expired` when the license has expired, `active` when a machine validated its key in the last 90 days, `inactive` otherwise.
+`canceled` when the license was canceled, `expired` when it has expired, `active` when a machine validated its key in the last 90 days, `inactive` otherwise.
 
 ## Properties
 

@@ -4,15 +4,99 @@ All URIs are relative to *https://api.licensemanager.dev*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**authorizeSlack**](IntegrationsApi.md#authorizeslack) | **POST** /v1/products/{productId}/integrations/slack/authorize | Start connecting a Slack channel |
 | [**checkIntegration**](IntegrationsApi.md#checkintegration) | **POST** /v1/integrations/{id}/check | Check an integration |
 | [**connectStripe**](IntegrationsApi.md#connectstripe) | **PUT** /v1/products/{productId}/integrations/stripe | Connect Stripe |
 | [**createStripeMapping**](IntegrationsApi.md#createstripemapping) | **POST** /v1/products/{productId}/integrations/stripe/mappings | Map a Stripe price to a policy |
+| [**deleteSlackConnection**](IntegrationsApi.md#deleteslackconnection) | **DELETE** /v1/slack-connections/{id} | Remove a Slack connection |
 | [**deleteStripeMapping**](IntegrationsApi.md#deletestripemapping) | **DELETE** /v1/integration-mappings/{id} | Delete a mapping |
 | [**disconnectIntegration**](IntegrationsApi.md#disconnectintegration) | **DELETE** /v1/integrations/{id} | Disconnect an integration |
+| [**getSlackIntegration**](IntegrationsApi.md#getslackintegration) | **GET** /v1/products/{productId}/integrations/slack | Get the Slack integration of a product |
 | [**getStripeIntegration**](IntegrationsApi.md#getstripeintegration) | **GET** /v1/products/{productId}/integrations/stripe | Get the Stripe integration of a product |
 | [**listStripePrices**](IntegrationsApi.md#liststripeprices) | **GET** /v1/integrations/{id}/stripe/prices | List the Stripe prices of an integration |
+| [**testSlackConnection**](IntegrationsApi.md#testslackconnection) | **POST** /v1/slack-connections/{id}/test | Send a test message to a Slack channel |
+| [**updateIntegration**](IntegrationsApi.md#updateintegration) | **PATCH** /v1/integrations/{id} | Update an integration |
+| [**updateSlackConnection**](IntegrationsApi.md#updateslackconnection) | **PATCH** /v1/slack-connections/{id} | Update a Slack connection |
 | [**updateStripeMapping**](IntegrationsApi.md#updatestripemapping) | **PATCH** /v1/integration-mappings/{id} | Change the policy of a mapping |
 
+
+
+## authorizeSlack
+
+> SlackAuthorize authorizeSlack(productId)
+
+Start connecting a Slack channel
+
+Returns the URL of Slack\&#39;s consent screen, where the user picks the channel getting the product\&#39;s notifications. Slack then redirects to the app\&#39;s integrations page. Doesn\&#39;t accept tokens: only API keys and sessions.  **Required role permission**: &#x60;integration:create&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { AuthorizeSlackRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    productId: x7Kp2QaZ,
+  } satisfies AuthorizeSlackRequest;
+
+  try {
+    const data = await api.authorizeSlack(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **productId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**SlackAuthorize**](SlackAuthorize.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Consent screen |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Product not found |  -  |
+| **409** | &#x60;slack_not_configured&#x60;: the server has no Slack app (&#x60;SLACK_CLIENT_ID&#x60; and &#x60;SLACK_CLIENT_SECRET&#x60;) |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## checkIntegration
@@ -169,7 +253,7 @@ example().catch(console.error);
 | **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
 | **404** | Product not found |  -  |
 | **409** | &#x60;webhook_url_unreachable&#x60;: Stripe can\&#39;t reach the server\&#39;s webhook URL |  -  |
-| **422** | &#x60;validation_error&#x60;: invalid body. &#x60;invalid_api_key&#x60;: not a Stripe secret or restricted key, or Stripe rejected it. &#x60;key_mode_mismatch&#x60;: a test mode key for a live product, or the opposite. &#x60;missing_permission&#x60;: the key lacks required permissions, listed in the message |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid body. &#x60;invalid_api_key&#x60;: not a Stripe secret or restricted key, or Stripe rejected it. &#x60;key_mode_mismatch&#x60;: a test mode key for a live product, or the opposite. &#x60;missing_permission&#x60;: the key lacks required permissions, listed in the message. Optional ones aren\&#39;t required: without Refunds: Write, it connects with &#x60;canRefund&#x60; false |  -  |
 | **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
 | **502** | &#x60;provider_unavailable&#x60;: Stripe couldn\&#39;t be reached |  -  |
 
@@ -254,6 +338,83 @@ example().catch(console.error);
 | **422** | &#x60;validation_error&#x60;: invalid body. &#x60;price_unusable&#x60;: the price is archived, or isn\&#39;t a one-time price |  -  |
 | **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
 | **502** | &#x60;provider_unavailable&#x60;: Stripe couldn\&#39;t be reached |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## deleteSlackConnection
+
+> deleteSlackConnection(id)
+
+Remove a Slack connection
+
+Stops posting to the channel and revokes the installation\&#39;s token in Slack. Doesn\&#39;t accept tokens: only API keys and sessions.  **Required role permission**: &#x60;integration:delete&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { DeleteSlackConnectionRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    id: s4Hq8ZpLm,
+  } satisfies DeleteSlackConnectionRequest;
+
+  try {
+    const data = await api.deleteSlackConnection(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **204** | Removed |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Slack connection not found |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
@@ -413,6 +574,83 @@ example().catch(console.error);
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## getSlackIntegration
+
+> SlackIntegration getSlackIntegration(productId)
+
+Get the Slack integration of a product
+
+Slack channels getting notifications about the product\&#39;s licenses: purchases, renewals, failed payments and cancellations. Doesn\&#39;t accept tokens: only API keys and sessions.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { GetSlackIntegrationRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    productId: x7Kp2QaZ,
+  } satisfies GetSlackIntegrationRequest;
+
+  try {
+    const data = await api.getSlackIntegration(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **productId** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**SlackIntegration**](SlackIntegration.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Slack integration |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Product not found |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## getStripeIntegration
 
 > StripeIntegration getStripeIntegration(productId)
@@ -564,6 +802,244 @@ example().catch(console.error);
 | **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
 | **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
 | **502** | &#x60;provider_unavailable&#x60;: Stripe couldn\&#39;t be reached, or refused the request |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## testSlackConnection
+
+> SlackConnection testSlackConnection(id)
+
+Send a test message to a Slack channel
+
+Posts a message to the channel, to check it gets the notifications. Marks the connection &#x60;revoked&#x60; when Slack says it won\&#39;t work again. Doesn\&#39;t accept tokens: only API keys and sessions.  **Required role permission**: &#x60;integration:update&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { TestSlackConnectionRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    id: s4Hq8ZpLm,
+  } satisfies TestSlackConnectionRequest;
+
+  try {
+    const data = await api.testSlackConnection(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` |  | [Defaults to `undefined`] |
+
+### Return type
+
+[**SlackConnection**](SlackConnection.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Slack connection, after the test |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Slack connection not found |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
+| **502** | &#x60;slack_error&#x60;: Slack refused the message |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateIntegration
+
+> Integration updateIntegration(id, updateIntegration)
+
+Update an integration
+
+Changes the settings of the integration, for every product of its mode. Doesn\&#39;t accept tokens: only API keys and sessions.  **Required role permission**: &#x60;integration:update&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { UpdateIntegrationRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    id: i8Fz4QnRt,
+    // UpdateIntegration
+    updateIntegration: ...,
+  } satisfies UpdateIntegrationRequest;
+
+  try {
+    const data = await api.updateIntegration(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` |  | [Defaults to `undefined`] |
+| **updateIntegration** | [UpdateIntegration](UpdateIntegration.md) |  | |
+
+### Return type
+
+[**Integration**](Integration.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Updated integration |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Integration not found |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid body. &#x60;missing_permission&#x60;: turning &#x60;autoRefund&#x60; on while the API key lacks the Refunds: Write permission |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## updateSlackConnection
+
+> SlackConnection updateSlackConnection(id, updateSlackConnection)
+
+Update a Slack connection
+
+Changes the notifications the channel gets. Doesn\&#39;t accept tokens: only API keys and sessions.  **Required role permission**: &#x60;integration:update&#x60; when called with a session, granted by the member\&#39;s role. API keys aren\&#39;t limited by roles.
+
+### Example
+
+```ts
+import {
+  Configuration,
+  IntegrationsApi,
+} from '@licenseman/sdk';
+import type { UpdateSlackConnectionRequest } from '@licenseman/sdk';
+
+async function example() {
+  console.log("🚀 Testing @licenseman/sdk SDK...");
+  const config = new Configuration({ 
+    // To configure API key authorization: apiKey
+    apiKey: "YOUR API KEY",
+  });
+  const api = new IntegrationsApi(config);
+
+  const body = {
+    // string
+    id: s4Hq8ZpLm,
+    // UpdateSlackConnection
+    updateSlackConnection: ...,
+  } satisfies UpdateSlackConnectionRequest;
+
+  try {
+    const data = await api.updateSlackConnection(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `string` |  | [Defaults to `undefined`] |
+| **updateSlackConnection** | [UpdateSlackConnection](UpdateSlackConnection.md) |  | |
+
+### Return type
+
+[**SlackConnection**](SlackConnection.md)
+
+### Authorization
+
+[apiKey](../README.md#apiKey)
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | Updated Slack connection |  -  |
+| **401** | &#x60;unauthorized&#x60;: no credentials. &#x60;invalid_api_key&#x60;: the API key doesn\&#39;t exist, was revoked or has expired. &#x60;invalid_token&#x60;: the token\&#39;s signature is invalid, it has expired, or the resource it\&#39;s scoped to was deleted |  -  |
+| **402** | &#x60;plan_limit_exceeded&#x60;: the organization stayed over its plan\&#39;s limits after the grace period, its API is blocked until it upgrades. &#x60;plan_limit_reached&#x60;: creating the resource would go over the plan\&#39;s limit |  -  |
+| **403** | &#x60;token_not_allowed&#x60;: the endpoint doesn\&#39;t accept tokens, or not of this type. &#x60;insufficient_scope&#x60;: the token lacks the permission. &#x60;no_active_organization&#x60; or &#x60;forbidden&#x60;: the session has no organization, or isn\&#39;t a member of the one requested |  -  |
+| **404** | Slack connection not found |  -  |
+| **422** | &#x60;validation_error&#x60;: invalid path, query or body, with the &#x60;issues&#x60; |  -  |
+| **429** | &#x60;rate_limited&#x60;: the API key made more than 10 requests in the last second. Wait for the &#x60;Retry-After&#x60; seconds |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 

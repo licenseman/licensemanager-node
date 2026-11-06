@@ -27,6 +27,13 @@ import {
     ProductStatsActiveMachinesByPlatformInnerToJSON,
     ProductStatsActiveMachinesByPlatformInnerToJSONTyped,
 } from './ProductStatsActiveMachinesByPlatformInner.js';
+import type { SubscriptionStats } from './SubscriptionStats.js';
+import {
+    SubscriptionStatsFromJSON,
+    SubscriptionStatsFromJSONTyped,
+    SubscriptionStatsToJSON,
+    SubscriptionStatsToJSONTyped,
+} from './SubscriptionStats.js';
 import type { Revenue } from './Revenue.js';
 import {
     RevenueFromJSON,
@@ -34,6 +41,13 @@ import {
     RevenueToJSON,
     RevenueToJSONTyped,
 } from './Revenue.js';
+import type { CancellationStats } from './CancellationStats.js';
+import {
+    CancellationStatsFromJSON,
+    CancellationStatsFromJSONTyped,
+    CancellationStatsToJSON,
+    CancellationStatsToJSONTyped,
+} from './CancellationStats.js';
 import type { ProductStatsNewLicensesByPolicyInner } from './ProductStatsNewLicensesByPolicyInner.js';
 import {
     ProductStatsNewLicensesByPolicyInnerFromJSON,
@@ -60,7 +74,7 @@ export interface ProductStats {
      */
     licenseCount: number;
     /**
-     * Number of licenses that haven't expired, and that a machine validated in the last 90 days.
+     * Number of licenses that haven't expired nor were canceled, and that a machine validated in the last 90 days.
      */
     activeLicenseCount: number;
     /**
@@ -68,11 +82,11 @@ export interface ProductStats {
      */
     newLicenseCount: number;
     /**
-     * Number of licenses expiring in the next 30 days.
+     * Number of licenses expiring in the next 30 days, canceled ones left out.
      */
     expiringLicenseCount: number;
     /**
-     * Number of licenses that expired in the last 30 days.
+     * Number of licenses that expired in the last 30 days, canceled ones left out.
      */
     expiredLicenseCount: number;
     /**
@@ -84,7 +98,7 @@ export interface ProductStats {
      */
     inUseLicenseCount: number;
     /**
-     * Sum of the maximum numbers of machines of the licenses that haven't expired. Licenses without a maximum are left out.
+     * Sum of the maximum numbers of machines of the licenses that haven't expired nor were canceled. Licenses without a maximum are left out.
      */
     seatCount: number;
     /**
@@ -115,6 +129,14 @@ export interface ProductStats {
      * Number of licenses of each policy created each day and each month, for the policies with licenses created over the covered months.
      */
     newLicensesByPolicy: Array<ProductStatsNewLicensesByPolicyInner>;
+    /**
+     * Cancellations of the licenses with a money back guarantee. `null` when no license of the product has one.
+     */
+    cancellation: CancellationStats | null;
+    /**
+     * Subscriptions of the product. `null` when it has never had one.
+     */
+    subscriptions: SubscriptionStats | null;
     /**
      * Revenue in each currency licenses were sold in, from the one with the most licenses sold. Amounts aren't converted between currencies.
      */
@@ -152,6 +174,8 @@ export function instanceOfProductStats(value: object): value is ProductStats {
     if (!('newLicensesByDay' in value) || value['newLicensesByDay'] === undefined) return false;
     if (!('newLicensesByMonth' in value) || value['newLicensesByMonth'] === undefined) return false;
     if (!('newLicensesByPolicy' in value) || value['newLicensesByPolicy'] === undefined) return false;
+    if (!('cancellation' in value) || value['cancellation'] === undefined) return false;
+    if (!('subscriptions' in value) || value['subscriptions'] === undefined) return false;
     if (!('revenue' in value) || value['revenue'] === undefined) return false;
     if (!('activationsByVersion' in value) || value['activationsByVersion'] === undefined) return false;
     if (!('activeMachinesByVersion' in value) || value['activeMachinesByVersion'] === undefined) return false;
@@ -184,6 +208,8 @@ export function ProductStatsFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'newLicensesByDay': json['newLicensesByDay'],
         'newLicensesByMonth': json['newLicensesByMonth'],
         'newLicensesByPolicy': ((json['newLicensesByPolicy'] as Array<any>).map(ProductStatsNewLicensesByPolicyInnerFromJSON)),
+        'cancellation': CancellationStatsFromJSON(json['cancellation']),
+        'subscriptions': SubscriptionStatsFromJSON(json['subscriptions']),
         'revenue': ((json['revenue'] as Array<any>).map(RevenueFromJSON)),
         'activationsByVersion': ((json['activationsByVersion'] as Array<any>).map(ProductStatsActivationsByVersionInnerFromJSON)),
         'activeMachinesByVersion': ((json['activeMachinesByVersion'] as Array<any>).map(ProductStatsActiveMachinesByVersionInnerFromJSON)),
@@ -217,6 +243,8 @@ export function ProductStatsToJSONTyped(value?: ProductStats | null, ignoreDiscr
         'newLicensesByDay': value['newLicensesByDay'],
         'newLicensesByMonth': value['newLicensesByMonth'],
         'newLicensesByPolicy': ((value['newLicensesByPolicy'] as Array<any>).map(ProductStatsNewLicensesByPolicyInnerToJSON)),
+        'cancellation': CancellationStatsToJSON(value['cancellation']),
+        'subscriptions': SubscriptionStatsToJSON(value['subscriptions']),
         'revenue': ((value['revenue'] as Array<any>).map(RevenueToJSON)),
         'activationsByVersion': ((value['activationsByVersion'] as Array<any>).map(ProductStatsActivationsByVersionInnerToJSON)),
         'activeMachinesByVersion': ((value['activeMachinesByVersion'] as Array<any>).map(ProductStatsActiveMachinesByVersionInnerToJSON)),

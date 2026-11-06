@@ -11,6 +11,7 @@ Name | Type
 `productName` | string
 `nickname` | string
 `price` | [Price](Price.md)
+`recurring` | [StripePriceRecurring](StripePriceRecurring.md)
 `mapped` | boolean
 
 ## Example
@@ -25,6 +26,7 @@ const example = {
   "productName": Acme Pro,
   "nickname": Launch price,
   "price": null,
+  "recurring": null,
   "mapped": null,
 } satisfies StripePrice
 

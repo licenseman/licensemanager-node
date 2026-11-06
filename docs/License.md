@@ -10,6 +10,7 @@ Name | Type
 `productId` | string
 `policyId` | string
 `customerId` | string
+`customer` | [LicenseCustomer](LicenseCustomer.md)
 `key` | string
 `createdAt` | Date
 `expiresAt` | Date
@@ -22,6 +23,12 @@ Name | Type
 `maxVersion` | [LicenseMaxVersion](LicenseMaxVersion.md)
 `price` | [Price](Price.md)
 `status` | [LicenseStatus](LicenseStatus.md)
+`cancellableUntil` | Date
+`canceledAt` | Date
+`cancellationReason` | [CancellationReason](CancellationReason.md)
+`subscription` | [LicenseSubscription](LicenseSubscription.md)
+`cancellationComment` | string
+`stripeRefundId` | string
 `updatedAt` | Date
 
 ## Example
@@ -35,6 +42,7 @@ const example = {
   "productId": x7Kp2QaZ,
   "policyId": p4Rt8LmQ,
   "customerId": c9Wd3RtE,
+  "customer": null,
   "key": 7KQ2M-X9ZPA-H4TRC-WN6EY-B3JDF,
   "createdAt": 2026-01-15T09:30:00.000Z,
   "expiresAt": 2027-01-15T09:30:00.000Z,
@@ -47,6 +55,12 @@ const example = {
   "maxVersion": null,
   "price": null,
   "status": null,
+  "cancellableUntil": 2026-02-14T09:30:00.000Z,
+  "canceledAt": 2026-01-20T16:12:00.000Z,
+  "cancellationReason": null,
+  "subscription": null,
+  "cancellationComment": I only needed it for one project.,
+  "stripeRefundId": re_3MtwBwLkdIwHu7ix0Bs5rA2b,
   "updatedAt": 2026-01-15T09:30:00.000Z,
 } satisfies License
 

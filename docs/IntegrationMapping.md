@@ -14,6 +14,7 @@ Name | Type
 `stripePriceId` | string
 `productName` | string
 `price` | [Price](Price.md)
+`recurring` | [IntegrationMappingRecurring](IntegrationMappingRecurring.md)
 `status` | string
 `statusReason` | string
 `createdAt` | Date
@@ -33,6 +34,7 @@ const example = {
   "stripePriceId": price_1MoBy5LkdIwHu7ix,
   "productName": Acme Pro,
   "price": null,
+  "recurring": null,
   "status": null,
   "statusReason": The price is archived in Stripe,
   "createdAt": null,

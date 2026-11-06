@@ -14,6 +14,16 @@
 
 import * as runtime from '../runtime.js';
 import {
+    type BillingPortalSession,
+    BillingPortalSessionFromJSON,
+    BillingPortalSessionToJSON,
+} from '../models/BillingPortalSession.js';
+import {
+    type CreateBillingPortalSession,
+    CreateBillingPortalSessionFromJSON,
+    CreateBillingPortalSessionToJSON,
+} from '../models/CreateBillingPortalSession.js';
+import {
     type CreatePortalLink,
     CreatePortalLinkFromJSON,
     CreatePortalLinkToJSON,
@@ -43,6 +53,17 @@ import {
     SendPortalLinkFromJSON,
     SendPortalLinkToJSON,
 } from '../models/SendPortalLink.js';
+
+export interface CreateBillingPortalSessionRequest {
+    /**
+     * 
+     */
+    id: string;
+    /**
+     * 
+     */
+    createBillingPortalSession?: CreateBillingPortalSession;
+}
 
 export interface CreatePortalLinkRequest {
     /**
@@ -94,6 +115,68 @@ export interface SendPortalLinkRequest {
 export class PortalApi extends runtime.BaseAPI {
 
     /**
+     * Creates request options for createBillingPortalSession without sending the request
+     */
+    async createBillingPortalSessionRequestOpts(requestParameters: CreateBillingPortalSessionRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling createBillingPortalSession().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("token", ["customer:billing"]);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/v1/customers/{id}/billing-portal-sessions`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateBillingPortalSessionToJSON(requestParameters['createBillingPortalSession']),
+        };
+    }
+
+    /**
+     * Link to the Stripe customer portal of the customer\'s Stripe customer, where they manage their subscriptions: change their plan or payment method, see their invoices, cancel. Needs the Stripe integration\'s `canBillingPortal`, and the customer portal configured in the Stripe account\'s settings. The changes come back through the integration\'s webhook, keeping the subscription licenses in line.  **Token access**: customer tokens with the `customer:billing` permission (or the matching write one). A customer token reaches its own customer.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Open the Stripe customer portal of a customer
+     */
+    async createBillingPortalSessionRaw(requestParameters: CreateBillingPortalSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<BillingPortalSession>> {
+        const requestOptions = await this.createBillingPortalSessionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => BillingPortalSessionFromJSON(jsonValue));
+    }
+
+    /**
+     * Link to the Stripe customer portal of the customer\'s Stripe customer, where they manage their subscriptions: change their plan or payment method, see their invoices, cancel. Needs the Stripe integration\'s `canBillingPortal`, and the customer portal configured in the Stripe account\'s settings. The changes come back through the integration\'s webhook, keeping the subscription licenses in line.  **Token access**: customer tokens with the `customer:billing` permission (or the matching write one). A customer token reaches its own customer.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Open the Stripe customer portal of a customer
+     */
+    async createBillingPortalSession(requestParameters: CreateBillingPortalSessionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<BillingPortalSession> {
+        const response = await this.createBillingPortalSessionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for createPortalLink without sending the request
      */
     async createPortalLinkRequestOpts(requestParameters: CreatePortalLinkRequest): Promise<runtime.RequestOpts> {
@@ -135,7 +218,7 @@ export class PortalApi extends runtime.BaseAPI {
     }
 
     /**
-     * Link letting the customer see their licenses and deactivate their machines in the customer portal, without signing in. Anyone with the link can, until it expires or the customer is deleted: it can\'t be revoked otherwise. The token also works with the API endpoints that accept customer tokens.  Links can be created while the product\'s customer portal is disabled, but the portal answers `404` until it\'s enabled, and `sendPortalLink` refuses to email them.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Link letting the customer see their licenses, cancel them during their money back guarantee, and deactivate their machines in the customer portal, without signing in. Anyone with the link can, until it expires or the customer is deleted: it can\'t be revoked otherwise. The token also works with the API endpoints that accept customer tokens.  Links can be created while the product\'s customer portal is disabled, but the portal answers `404` until it\'s enabled, and `sendPortalLink` refuses to email them.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
      * Create a link to the customer portal
      */
     async createPortalLinkRaw(requestParameters: CreatePortalLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PortalLink>> {
@@ -146,7 +229,7 @@ export class PortalApi extends runtime.BaseAPI {
     }
 
     /**
-     * Link letting the customer see their licenses and deactivate their machines in the customer portal, without signing in. Anyone with the link can, until it expires or the customer is deleted: it can\'t be revoked otherwise. The token also works with the API endpoints that accept customer tokens.  Links can be created while the product\'s customer portal is disabled, but the portal answers `404` until it\'s enabled, and `sendPortalLink` refuses to email them.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Link letting the customer see their licenses, cancel them during their money back guarantee, and deactivate their machines in the customer portal, without signing in. Anyone with the link can, until it expires or the customer is deleted: it can\'t be revoked otherwise. The token also works with the API endpoints that accept customer tokens.  Links can be created while the product\'s customer portal is disabled, but the portal answers `404` until it\'s enabled, and `sendPortalLink` refuses to email them.  **Required role permission**: `portalLink:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
      * Create a link to the customer portal
      */
     async createPortalLink(requestParameters: CreatePortalLinkRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PortalLink> {

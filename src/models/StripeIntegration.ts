@@ -50,7 +50,7 @@ export interface StripeIntegration {
      */
     webhookUrlReachable: boolean;
     /**
-     * Permissions the restricted API key needs, and why. Every other permission can stay `None`.
+     * Permissions the restricted API key needs, and why, the `optional` ones included. Every other permission can stay `None`.
      */
     requiredPermissions: Array<StripePermission>;
     /**
