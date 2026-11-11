@@ -151,6 +151,10 @@ export interface ListCustomerLicensesRequest {
      */
     machineVersion?: string;
     /**
+     * Only returns the licenses with at least one active machine on this platform.
+     */
+    machinePlatform?: string;
+    /**
      * Only returns the licenses with this status.
      */
     status?: LicenseStatus;
@@ -245,6 +249,10 @@ export interface ListLicensesRequest {
      * Only returns the licenses with at least one active machine running this version of the product.
      */
     machineVersion?: string;
+    /**
+     * Only returns the licenses with at least one active machine on this platform.
+     */
+    machinePlatform?: string;
     /**
      * Only returns the licenses with this status.
      */
@@ -711,6 +719,10 @@ export class LicensesApi extends runtime.BaseAPI {
             queryParameters['machineVersion'] = requestParameters['machineVersion'];
         }
 
+        if (requestParameters['machinePlatform'] != null) {
+            queryParameters['machinePlatform'] = requestParameters['machinePlatform'];
+        }
+
         if (requestParameters['status'] != null) {
             queryParameters['status'] = requestParameters['status'];
         }
@@ -856,6 +868,10 @@ export class LicensesApi extends runtime.BaseAPI {
 
         if (requestParameters['machineVersion'] != null) {
             queryParameters['machineVersion'] = requestParameters['machineVersion'];
+        }
+
+        if (requestParameters['machinePlatform'] != null) {
+            queryParameters['machinePlatform'] = requestParameters['machinePlatform'];
         }
 
         if (requestParameters['status'] != null) {

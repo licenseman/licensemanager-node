@@ -486,7 +486,7 @@ This endpoint does not need any parameter.
 
 ## listCustomerLicenses
 
-> LicenseList listCustomerLicenses(customerId, page, pageSize, sort, search, key, policyId, machineVersion, status, createdFrom, createdTo, lastActivatedFrom, lastActivatedTo, neverActivated, expiresFrom, expiresTo, neverExpires, currency, price, priceMin, priceMax, hasPrice)
+> LicenseList listCustomerLicenses(customerId, page, pageSize, sort, search, key, policyId, machineVersion, machinePlatform, status, createdFrom, createdTo, lastActivatedFrom, lastActivatedTo, neverActivated, expiresFrom, expiresTo, neverExpires, currency, price, priceMin, priceMax, hasPrice)
 
 List the licenses of a customer
 
@@ -528,6 +528,8 @@ async function example() {
     policyId: p4Rt8LmQ,
     // string | Only returns the licenses with at least one active machine running this version of the product. (optional)
     machineVersion: 2.3.1,
+    // string | Only returns the licenses with at least one active machine on this platform. (optional)
+    machinePlatform: macOS 15.1,
     // LicenseStatus | Only returns the licenses with this status. (optional)
     status: ...,
     // Date | Only returns the licenses created at or after this date. (optional)
@@ -583,6 +585,7 @@ example().catch(console.error);
 | **key** | `string` | Only returns the license with this exact key, case included. Keys of test products start with &#x60;TEST-&#x60;. | [Optional] [Defaults to `undefined`] |
 | **policyId** | `string` | Only returns the licenses following this policy. | [Optional] [Defaults to `undefined`] |
 | **machineVersion** | `string` | Only returns the licenses with at least one active machine running this version of the product. | [Optional] [Defaults to `undefined`] |
+| **machinePlatform** | `string` | Only returns the licenses with at least one active machine on this platform. | [Optional] [Defaults to `undefined`] |
 | **status** | `LicenseStatus` | Only returns the licenses with this status. | [Optional] [Defaults to `undefined`] [Enum: active, inactive, expired, canceled] |
 | **createdFrom** | `Date` | Only returns the licenses created at or after this date. | [Optional] [Defaults to `undefined`] |
 | **createdTo** | `Date` | Only returns the licenses created at or before this date. | [Optional] [Defaults to `undefined`] |
@@ -628,7 +631,7 @@ example().catch(console.error);
 
 ## listLicenses
 
-> LicenseList listLicenses(productId, page, pageSize, sort, search, key, policyId, customerId, machineVersion, status, createdFrom, createdTo, lastActivatedFrom, lastActivatedTo, neverActivated, expiresFrom, expiresTo, neverExpires, currency, price, priceMin, priceMax, hasPrice)
+> LicenseList listLicenses(productId, page, pageSize, sort, search, key, policyId, customerId, machineVersion, machinePlatform, status, createdFrom, createdTo, lastActivatedFrom, lastActivatedTo, neverActivated, expiresFrom, expiresTo, neverExpires, currency, price, priceMin, priceMax, hasPrice)
 
 List the licenses of a product
 
@@ -670,6 +673,8 @@ async function example() {
     customerId: c9Wd3RtE,
     // string | Only returns the licenses with at least one active machine running this version of the product. (optional)
     machineVersion: 2.3.1,
+    // string | Only returns the licenses with at least one active machine on this platform. (optional)
+    machinePlatform: macOS 15.1,
     // LicenseStatus | Only returns the licenses with this status. (optional)
     status: ...,
     // Date | Only returns the licenses created at or after this date. (optional)
@@ -726,6 +731,7 @@ example().catch(console.error);
 | **policyId** | `string` | Only returns the licenses following this policy. | [Optional] [Defaults to `undefined`] |
 | **customerId** | `string` | Only returns the licenses of this customer. | [Optional] [Defaults to `undefined`] |
 | **machineVersion** | `string` | Only returns the licenses with at least one active machine running this version of the product. | [Optional] [Defaults to `undefined`] |
+| **machinePlatform** | `string` | Only returns the licenses with at least one active machine on this platform. | [Optional] [Defaults to `undefined`] |
 | **status** | `LicenseStatus` | Only returns the licenses with this status. | [Optional] [Defaults to `undefined`] [Enum: active, inactive, expired, canceled] |
 | **createdFrom** | `Date` | Only returns the licenses created at or after this date. | [Optional] [Defaults to `undefined`] |
 | **createdTo** | `Date` | Only returns the licenses created at or before this date. | [Optional] [Defaults to `undefined`] |
