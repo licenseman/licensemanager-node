@@ -14,6 +14,11 @@
 
 import * as runtime from '../runtime.js';
 import {
+    type ConnectPaddle,
+    ConnectPaddleFromJSON,
+    ConnectPaddleToJSON,
+} from '../models/ConnectPaddle.js';
+import {
     type ConnectStripe,
     ConnectStripeFromJSON,
     ConnectStripeToJSON,
@@ -23,6 +28,11 @@ import {
     CreateIntegrationMappingFromJSON,
     CreateIntegrationMappingToJSON,
 } from '../models/CreateIntegrationMapping.js';
+import {
+    type CreatePaddleMapping,
+    CreatePaddleMappingFromJSON,
+    CreatePaddleMappingToJSON,
+} from '../models/CreatePaddleMapping.js';
 import {
     type Integration,
     IntegrationFromJSON,
@@ -34,10 +44,20 @@ import {
     IntegrationMappingToJSON,
 } from '../models/IntegrationMapping.js';
 import {
+    type ListPaddlePrices200Response,
+    ListPaddlePrices200ResponseFromJSON,
+    ListPaddlePrices200ResponseToJSON,
+} from '../models/ListPaddlePrices200Response.js';
+import {
     type ListStripePrices200Response,
     ListStripePrices200ResponseFromJSON,
     ListStripePrices200ResponseToJSON,
 } from '../models/ListStripePrices200Response.js';
+import {
+    type PaddleIntegration,
+    PaddleIntegrationFromJSON,
+    PaddleIntegrationToJSON,
+} from '../models/PaddleIntegration.js';
 import {
     type SlackAuthorize,
     SlackAuthorizeFromJSON,
@@ -88,6 +108,17 @@ export interface CheckIntegrationRequest {
     id: string;
 }
 
+export interface ConnectPaddleRequest {
+    /**
+     * 
+     */
+    productId: string;
+    /**
+     * 
+     */
+    connectPaddle: ConnectPaddle;
+}
+
 export interface ConnectStripeRequest {
     /**
      * 
@@ -97,6 +128,17 @@ export interface ConnectStripeRequest {
      * 
      */
     connectStripe: ConnectStripe;
+}
+
+export interface CreatePaddleMappingRequest {
+    /**
+     * 
+     */
+    productId: string;
+    /**
+     * 
+     */
+    createPaddleMapping: CreatePaddleMapping;
 }
 
 export interface CreateStripeMappingRequest {
@@ -131,6 +173,13 @@ export interface DisconnectIntegrationRequest {
     id: string;
 }
 
+export interface GetPaddleIntegrationRequest {
+    /**
+     * 
+     */
+    productId: string;
+}
+
 export interface GetSlackIntegrationRequest {
     /**
      * 
@@ -143,6 +192,13 @@ export interface GetStripeIntegrationRequest {
      * 
      */
     productId: string;
+}
+
+export interface ListPaddlePricesRequest {
+    /**
+     * 
+     */
+    id: string;
 }
 
 export interface ListStripePricesRequest {
@@ -300,6 +356,67 @@ export class IntegrationsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for connectPaddle without sending the request
+     */
+    async connectPaddleRequestOpts(requestParameters: ConnectPaddleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling connectPaddle().'
+            );
+        }
+
+        if (requestParameters['connectPaddle'] == null) {
+            throw new runtime.RequiredError(
+                'connectPaddle',
+                'Required parameter "connectPaddle" was null or undefined when calling connectPaddle().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/integrations/paddle`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ConnectPaddleToJSON(requestParameters['connectPaddle']),
+        };
+    }
+
+    /**
+     * Connects the Paddle Billing account of the API key for the organization\'s products of the product\'s mode, or replaces the key of the existing connection. Checks the key works and has the required permissions, then creates a notification destination on the account, telling the app about payments. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Connect Paddle
+     */
+    async connectPaddleRaw(requestParameters: ConnectPaddleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaddleIntegration>> {
+        const requestOptions = await this.connectPaddleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaddleIntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * Connects the Paddle Billing account of the API key for the organization\'s products of the product\'s mode, or replaces the key of the existing connection. Checks the key works and has the required permissions, then creates a notification destination on the account, telling the app about payments. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Connect Paddle
+     */
+    async connectPaddle(requestParameters: ConnectPaddleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaddleIntegration> {
+        const response = await this.connectPaddleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for connectStripe without sending the request
      */
     async connectStripeRequestOpts(requestParameters: ConnectStripeRequest): Promise<runtime.RequestOpts> {
@@ -357,6 +474,67 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async connectStripe(requestParameters: ConnectStripeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StripeIntegration> {
         const response = await this.connectStripeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for createPaddleMapping without sending the request
+     */
+    async createPaddleMappingRequestOpts(requestParameters: CreatePaddleMappingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling createPaddleMapping().'
+            );
+        }
+
+        if (requestParameters['createPaddleMapping'] == null) {
+            throw new runtime.RequiredError(
+                'createPaddleMapping',
+                'Required parameter "createPaddleMapping" was null or undefined when calling createPaddleMapping().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/integrations/paddle/mappings`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreatePaddleMappingToJSON(requestParameters['createPaddleMapping']),
+        };
+    }
+
+    /**
+     * Paying the price then creates licenses of the product with the policy: one per unit bought, or one per subscription for a recurring price. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Map a Paddle price to a policy
+     */
+    async createPaddleMappingRaw(requestParameters: CreatePaddleMappingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationMapping>> {
+        const requestOptions = await this.createPaddleMappingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationMappingFromJSON(jsonValue));
+    }
+
+    /**
+     * Paying the price then creates licenses of the product with the policy: one per unit bought, or one per subscription for a recurring price. Doesn\'t accept tokens: only API keys and sessions.  **Required role permission**: `integration:update` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Map a Paddle price to a policy
+     */
+    async createPaddleMapping(requestParameters: CreatePaddleMappingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationMapping> {
+        const response = await this.createPaddleMappingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -572,6 +750,57 @@ export class IntegrationsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for getPaddleIntegration without sending the request
+     */
+    async getPaddleIntegrationRequestOpts(requestParameters: GetPaddleIntegrationRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling getPaddleIntegration().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/integrations/paddle`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * The organization connects one Paddle Billing account for its live products, and one sandbox account for its test products. Its mappings tell which Paddle prices create licenses of the product. Doesn\'t accept tokens: only API keys and sessions.
+     * Get the Paddle integration of a product
+     */
+    async getPaddleIntegrationRaw(requestParameters: GetPaddleIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaddleIntegration>> {
+        const requestOptions = await this.getPaddleIntegrationRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaddleIntegrationFromJSON(jsonValue));
+    }
+
+    /**
+     * The organization connects one Paddle Billing account for its live products, and one sandbox account for its test products. Its mappings tell which Paddle prices create licenses of the product. Doesn\'t accept tokens: only API keys and sessions.
+     * Get the Paddle integration of a product
+     */
+    async getPaddleIntegration(requestParameters: GetPaddleIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaddleIntegration> {
+        const response = await this.getPaddleIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for getSlackIntegration without sending the request
      */
     async getSlackIntegrationRequestOpts(requestParameters: GetSlackIntegrationRequest): Promise<runtime.RequestOpts> {
@@ -670,6 +899,57 @@ export class IntegrationsApi extends runtime.BaseAPI {
      */
     async getStripeIntegration(requestParameters: GetStripeIntegrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StripeIntegration> {
         const response = await this.getStripeIntegrationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listPaddlePrices without sending the request
+     */
+    async listPaddlePricesRequestOpts(requestParameters: ListPaddlePricesRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling listPaddlePrices().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/integrations/{id}/paddle/prices`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Active catalog prices of active products of the Paddle account, the ones that can be mapped, up to 500. Doesn\'t accept tokens: only API keys and sessions.
+     * List the Paddle prices of an integration
+     */
+    async listPaddlePricesRaw(requestParameters: ListPaddlePricesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPaddlePrices200Response>> {
+        const requestOptions = await this.listPaddlePricesRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListPaddlePrices200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Active catalog prices of active products of the Paddle account, the ones that can be mapped, up to 500. Doesn\'t accept tokens: only API keys and sessions.
+     * List the Paddle prices of an integration
+     */
+    async listPaddlePrices(requestParameters: ListPaddlePricesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPaddlePrices200Response> {
+        const response = await this.listPaddlePricesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -48,6 +48,7 @@ export type EventActorOneOf4TypeEnum = typeof EventActorOneOf4TypeEnum[keyof typ
  */
 export const EventActorOneOf4ProviderEnum = {
     Stripe: 'stripe',
+    Paddle: 'paddle',
     UnknownDefaultOpenApi: '11184809',
 } as const;
 export type EventActorOneOf4ProviderEnum = typeof EventActorOneOf4ProviderEnum[keyof typeof EventActorOneOf4ProviderEnum];
@@ -62,8 +63,6 @@ export function instanceOfEventActorOneOf4(value: object): value is EventActorOn
     
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('provider' in value) || value['provider'] === undefined) return false;
-    if (value['provider'] !== 'stripe') return false;
-    
     return true;
 }
 

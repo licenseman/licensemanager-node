@@ -40,7 +40,7 @@ export interface Integration {
      */
     livemode: boolean;
     /**
-     * Name of the Stripe account, `null` when the API key can't read it.
+     * Name of the Stripe account, `null` when the API key can't read it, and for Paddle, whose API doesn't give it.
      */
     accountName: string | null;
     /**
@@ -48,7 +48,7 @@ export interface Integration {
      */
     apiKeyHint: string;
     /**
-     * URL of the webhook endpoint created on the Stripe account.
+     * URL of the webhook endpoint created on the Stripe account, or of the notification destination created on the Paddle account.
      */
     webhookUrl: string;
     /**
@@ -68,23 +68,23 @@ export interface Integration {
      */
     lastEventAt: Date | null;
     /**
-     * Whether canceling a license bought through Stripe refunds its payment. On by default, always off when `canRefund` is false.
+     * Whether canceling a license bought through the integration refunds its payment. On by default, always off when `canRefund` is false.
      */
     autoRefund: boolean;
     /**
-     * Whether the API key has the optional Refunds: Write permission, checked when connecting and every day. Without it, canceled licenses aren't refunded: refund their payments from Stripe.
+     * Whether the API key has the optional refund permission (Stripe: Refunds: Write, Paddle: Adjustments: Write), checked when connecting and every day. Without it, canceled licenses aren't refunded: refund their payments from the provider.
      */
     canRefund: boolean;
     /**
-     * Whether the API key has the optional Subscriptions: Write permission, checked when connecting and every day. Without it, subscription licenses can't be canceled from the app: cancel their subscriptions from Stripe.
+     * Whether the API key has the optional Subscriptions: Write permission, checked when connecting and every day. Without it, subscription licenses can't be canceled from the app: cancel their subscriptions from the provider.
      */
     canManageSubscriptions: boolean;
     /**
-     * Whether the API key has the optional Customer portal: Write permission, checked when connecting and every day. Without it, the license portal doesn't link to the Stripe customer portal.
+     * Whether the API key has the optional customer portal permission (Stripe: Customer portal: Write, Paddle: Customer portal sessions: Write), checked when connecting and every day. Without it, the license portal doesn't link to the provider's customer portal.
      */
     canBillingPortal: boolean;
     /**
-     * Days a subscription license stays valid after its period ends while its renewal is unpaid, as Stripe retries the payment. 7 by default.
+     * Days a subscription license stays valid after its period ends while its renewal is unpaid, as the provider retries the payment. 7 by default.
      */
     subscriptionGraceDays: number;
     /**
@@ -99,6 +99,7 @@ export interface Integration {
  */
 export const IntegrationProviderEnum = {
     Stripe: 'stripe',
+    Paddle: 'paddle',
     UnknownDefaultOpenApi: '11184809',
 } as const;
 export type IntegrationProviderEnum = typeof IntegrationProviderEnum[keyof typeof IntegrationProviderEnum];
@@ -110,8 +111,6 @@ export type IntegrationProviderEnum = typeof IntegrationProviderEnum[keyof typeo
 export function instanceOfIntegration(value: object): value is Integration {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('provider' in value) || value['provider'] === undefined) return false;
-    if (value['provider'] !== 'stripe') return false;
-    
     if (!('livemode' in value) || value['livemode'] === undefined) return false;
     if (!('accountName' in value) || value['accountName'] === undefined) return false;
     if (!('apiKeyHint' in value) || value['apiKeyHint'] === undefined) return false;

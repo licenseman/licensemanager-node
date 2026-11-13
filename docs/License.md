@@ -16,6 +16,7 @@ Name | Type
 `expiresAt` | Date
 `meta` | { [key: string]: any | null; }
 `stripePaymentIntentId` | string
+`paddleTransactionId` | string
 `maxMachines` | number
 `maxOfflineDurationSeconds` | number
 `activeMachineCount` | number
@@ -29,6 +30,8 @@ Name | Type
 `subscription` | [LicenseSubscription](LicenseSubscription.md)
 `cancellationComment` | string
 `stripeRefundId` | string
+`paddleAdjustmentId` | string
+`paddleRefundStatus` | string
 `updatedAt` | Date
 
 ## Example
@@ -48,6 +51,7 @@ const example = {
   "expiresAt": 2027-01-15T09:30:00.000Z,
   "meta": {seats=5},
   "stripePaymentIntentId": pi_3MtwBwLkdIwHu7ix28a3tqPa,
+  "paddleTransactionId": txn_01h04vsc0qhwtsbsxh3422wjs4,
   "maxMachines": 3,
   "maxOfflineDurationSeconds": 604800,
   "activeMachineCount": 2,
@@ -61,6 +65,8 @@ const example = {
   "subscription": null,
   "cancellationComment": I only needed it for one project.,
   "stripeRefundId": re_3MtwBwLkdIwHu7ix0Bs5rA2b,
+  "paddleAdjustmentId": adj_01h04vsc0qhwtsbsxh3422wjs4,
+  "paddleRefundStatus": approved,
   "updatedAt": 2026-01-15T09:30:00.000Z,
 } satisfies License
 

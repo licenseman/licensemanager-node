@@ -45,21 +45,35 @@ export interface IntegrationMapping {
     /**
      * 
      */
+    provider: IntegrationMappingProviderEnum;
+    /**
+     * 
+     */
     productId: string;
     /**
      * 
      */
     policyId: string;
     /**
-     * 
+     * Id of the product in the provider: `prod_…` in Stripe, `pro_…` in Paddle.
+     */
+    externalProductId: string;
+    /**
+     * Id of the price in the provider: `price_…` in Stripe, `pri_…` in Paddle.
+     */
+    externalPriceId: string;
+    /**
+     * Deprecated: use `externalProductId`, which it equals.
+     * @deprecated
      */
     stripeProductId: string;
     /**
-     * 
+     * Deprecated: use `externalPriceId`, which it equals.
+     * @deprecated
      */
     stripePriceId: string;
     /**
-     * Name of the Stripe product when it was mapped.
+     * Name of the provider's product when it was mapped.
      */
     productName: string;
     /**
@@ -88,6 +102,16 @@ export interface IntegrationMapping {
 /**
  * @export
  */
+export const IntegrationMappingProviderEnum = {
+    Stripe: 'stripe',
+    Paddle: 'paddle',
+    UnknownDefaultOpenApi: '11184809',
+} as const;
+export type IntegrationMappingProviderEnum = typeof IntegrationMappingProviderEnum[keyof typeof IntegrationMappingProviderEnum];
+
+/**
+ * @export
+ */
 export const IntegrationMappingStatusEnum = {
     Active: 'active',
     Error: 'error',
@@ -102,8 +126,11 @@ export type IntegrationMappingStatusEnum = typeof IntegrationMappingStatusEnum[k
 export function instanceOfIntegrationMapping(value: object): value is IntegrationMapping {
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('integrationId' in value) || value['integrationId'] === undefined) return false;
+    if (!('provider' in value) || value['provider'] === undefined) return false;
     if (!('productId' in value) || value['productId'] === undefined) return false;
     if (!('policyId' in value) || value['policyId'] === undefined) return false;
+    if (!('externalProductId' in value) || value['externalProductId'] === undefined) return false;
+    if (!('externalPriceId' in value) || value['externalPriceId'] === undefined) return false;
     if (!('stripeProductId' in value) || value['stripeProductId'] === undefined) return false;
     if (!('stripePriceId' in value) || value['stripePriceId'] === undefined) return false;
     if (!('productName' in value) || value['productName'] === undefined) return false;
@@ -127,8 +154,11 @@ export function IntegrationMappingFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'id': json['id'],
         'integrationId': json['integrationId'],
+        'provider': json['provider'],
         'productId': json['productId'],
         'policyId': json['policyId'],
+        'externalProductId': json['externalProductId'],
+        'externalPriceId': json['externalPriceId'],
         'stripeProductId': json['stripeProductId'],
         'stripePriceId': json['stripePriceId'],
         'productName': json['productName'],
@@ -153,8 +183,11 @@ export function IntegrationMappingToJSONTyped(value?: IntegrationMapping | null,
         
         'id': value['id'],
         'integrationId': value['integrationId'],
+        'provider': value['provider'],
         'productId': value['productId'],
         'policyId': value['policyId'],
+        'externalProductId': value['externalProductId'],
+        'externalPriceId': value['externalPriceId'],
         'stripeProductId': value['stripeProductId'],
         'stripePriceId': value['stripePriceId'],
         'productName': value['productName'],

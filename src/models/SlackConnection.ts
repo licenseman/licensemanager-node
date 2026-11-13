@@ -44,7 +44,7 @@ export interface SlackConnection {
      */
     configurationUrl: string | null;
     /**
-     * Notifications the channel gets: `purchased` (a license bought through Stripe), `renewed` (a subscription renewal paid), `payment_failed` (a subscription payment failed) and `canceled` (a license canceled, or its subscription ended).
+     * Notifications the channel gets: `purchased` (a license bought through Stripe or Paddle), `renewed` (a subscription renewal paid), `payment_failed` (a subscription payment failed) and `canceled` (a license canceled, or its subscription ended).
      */
     events: Array<SlackConnectionEventsEnum>;
     /**

@@ -103,6 +103,10 @@ export interface License {
      */
     stripePaymentIntentId: string | null;
     /**
+     * Id of the Paddle transaction that paid the license, when it was bought through the Paddle integration. `null` otherwise.
+     */
+    paddleTransactionId: string | null;
+    /**
      * Maximum number of active machines the license can be used on. `null` when there's no limit. Can be lower than `activeMachineCount` after it was lowered: machines aren't deactivated to match it.
      */
     maxMachines: number | null;
@@ -155,11 +159,30 @@ export interface License {
      */
     stripeRefundId: string | null;
     /**
+     * Id of the Paddle refund adjustment of the license's transaction once it was canceled, through the Paddle integration. `null` otherwise.
+     */
+    paddleAdjustmentId: string | null;
+    /**
+     * Outcome of the Paddle refund: `pending_approval` while Paddle reviews it, then `approved` or `rejected`. `null` without a Paddle refund.
+     */
+    paddleRefundStatus: LicensePaddleRefundStatusEnum | null;
+    /**
      * Last time the license's settings were edited, not when its key was validated.
      */
     updatedAt: Date;
 }
 
+
+/**
+ * @export
+ */
+export const LicensePaddleRefundStatusEnum = {
+    PendingApproval: 'pending_approval',
+    Approved: 'approved',
+    Rejected: 'rejected',
+    UnknownDefaultOpenApi: '11184809',
+} as const;
+export type LicensePaddleRefundStatusEnum = typeof LicensePaddleRefundStatusEnum[keyof typeof LicensePaddleRefundStatusEnum];
 
 
 /**
@@ -176,6 +199,7 @@ export function instanceOfLicense(value: object): value is License {
     if (!('expiresAt' in value) || value['expiresAt'] === undefined) return false;
     if (!('meta' in value) || value['meta'] === undefined) return false;
     if (!('stripePaymentIntentId' in value) || value['stripePaymentIntentId'] === undefined) return false;
+    if (!('paddleTransactionId' in value) || value['paddleTransactionId'] === undefined) return false;
     if (!('maxMachines' in value) || value['maxMachines'] === undefined) return false;
     if (!('maxOfflineDurationSeconds' in value) || value['maxOfflineDurationSeconds'] === undefined) return false;
     if (!('activeMachineCount' in value) || value['activeMachineCount'] === undefined) return false;
@@ -189,6 +213,8 @@ export function instanceOfLicense(value: object): value is License {
     if (!('subscription' in value) || value['subscription'] === undefined) return false;
     if (!('cancellationComment' in value) || value['cancellationComment'] === undefined) return false;
     if (!('stripeRefundId' in value) || value['stripeRefundId'] === undefined) return false;
+    if (!('paddleAdjustmentId' in value) || value['paddleAdjustmentId'] === undefined) return false;
+    if (!('paddleRefundStatus' in value) || value['paddleRefundStatus'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
 }
@@ -213,6 +239,7 @@ export function LicenseFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
         'expiresAt': (json['expiresAt'] == null ? null : parseDateTime(json['expiresAt'])),
         'meta': json['meta'],
         'stripePaymentIntentId': json['stripePaymentIntentId'],
+        'paddleTransactionId': json['paddleTransactionId'],
         'maxMachines': json['maxMachines'],
         'maxOfflineDurationSeconds': json['maxOfflineDurationSeconds'],
         'activeMachineCount': json['activeMachineCount'],
@@ -226,6 +253,8 @@ export function LicenseFromJSONTyped(json: any, ignoreDiscriminator: boolean): L
         'subscription': LicenseSubscriptionFromJSON(json['subscription']),
         'cancellationComment': json['cancellationComment'],
         'stripeRefundId': json['stripeRefundId'],
+        'paddleAdjustmentId': json['paddleAdjustmentId'],
+        'paddleRefundStatus': json['paddleRefundStatus'],
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
     };
 }
@@ -251,6 +280,7 @@ export function LicenseToJSONTyped(value?: License | null, ignoreDiscriminator: 
         'expiresAt': value['expiresAt'] == null ? value['expiresAt'] : serializeDateTime(value['expiresAt']),
         'meta': value['meta'],
         'stripePaymentIntentId': value['stripePaymentIntentId'],
+        'paddleTransactionId': value['paddleTransactionId'],
         'maxMachines': value['maxMachines'],
         'maxOfflineDurationSeconds': value['maxOfflineDurationSeconds'],
         'activeMachineCount': value['activeMachineCount'],
@@ -264,6 +294,8 @@ export function LicenseToJSONTyped(value?: License | null, ignoreDiscriminator: 
         'subscription': LicenseSubscriptionToJSON(value['subscription']),
         'cancellationComment': value['cancellationComment'],
         'stripeRefundId': value['stripeRefundId'],
+        'paddleAdjustmentId': value['paddleAdjustmentId'],
+        'paddleRefundStatus': value['paddleRefundStatus'],
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),
     };
 }

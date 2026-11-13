@@ -1,12 +1,14 @@
 
 # LicenseSubscription
 
-The Stripe subscription keeping the license valid, `null` when it isn\'t a subscription license. The license expires when it stops being paid, includes every update, and can\'t be canceled during a money back guarantee.
+The Stripe or Paddle subscription keeping the license valid, `null` when it isn\'t a subscription license. The license expires when it stops being paid, includes every update, and can\'t be canceled during a money back guarantee.
 
 ## Properties
 
 Name | Type
 ------------ | -------------
+`provider` | string
+`externalId` | string
 `stripeSubscriptionId` | string
 `status` | string
 `interval` | string
@@ -24,6 +26,8 @@ import type { LicenseSubscription } from '@licenseman/sdk'
 
 // TODO: Update the object below with actual values
 const example = {
+  "provider": null,
+  "externalId": sub_1MowQVLkdIwHu7ix,
   "stripeSubscriptionId": sub_1MowQVLkdIwHu7ix,
   "status": active,
   "interval": null,

@@ -12,6 +12,7 @@ Name | Type
 `name` | string
 `licenseCount` | number
 `stripeCustomerId` | string
+`paddleCustomerId` | string
 `createdAt` | Date
 
 ## Example
@@ -27,6 +28,7 @@ const example = {
   "name": Jane Doe,
   "licenseCount": 3,
   "stripeCustomerId": cus_NffrFeUfNV2Hib,
+  "paddleCustomerId": ctm_01h04vsc0qhwtsbsxh3422wjs4,
   "createdAt": 2026-01-15T09:30:00.000Z,
 } satisfies Customer
 

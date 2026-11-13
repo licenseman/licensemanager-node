@@ -7,11 +7,13 @@ docs/CancelLicense.md
 docs/CancellationReason.md
 docs/CancellationStats.md
 docs/CancellationStatsByReasonInner.md
+docs/ConnectPaddle.md
 docs/ConnectStripe.md
 docs/CreateBillingPortalSession.md
 docs/CreateCustomer.md
 docs/CreateIntegrationMapping.md
 docs/CreateLicense.md
+docs/CreatePaddleMapping.md
 docs/CreatePolicy.md
 docs/CreatePortalLink.md
 docs/CreateProduct.md
@@ -53,6 +55,7 @@ docs/LicenseStatus.md
 docs/LicenseSubscription.md
 docs/LicenseToken.md
 docs/LicensesApi.md
+docs/ListPaddlePrices200Response.md
 docs/ListPolicyEventsTypeParameter.md
 docs/ListStripePrices200Response.md
 docs/LockMaxVersion.md
@@ -67,6 +70,9 @@ docs/ModelError.md
 docs/Mrr.md
 docs/MrrByIntervalInner.md
 docs/MrrByPolicyInner.md
+docs/PaddleIntegration.md
+docs/PaddlePermission.md
+docs/PaddlePrice.md
 docs/Pagination.md
 docs/PoliciesApi.md
 docs/Policy.md
@@ -141,11 +147,13 @@ src/models/CancelLicense.ts
 src/models/CancellationReason.ts
 src/models/CancellationStats.ts
 src/models/CancellationStatsByReasonInner.ts
+src/models/ConnectPaddle.ts
 src/models/ConnectStripe.ts
 src/models/CreateBillingPortalSession.ts
 src/models/CreateCustomer.ts
 src/models/CreateIntegrationMapping.ts
 src/models/CreateLicense.ts
+src/models/CreatePaddleMapping.ts
 src/models/CreatePolicy.ts
 src/models/CreatePortalLink.ts
 src/models/CreateProduct.ts
@@ -183,6 +191,7 @@ src/models/LicenseStatsActivationsByVersionInner.ts
 src/models/LicenseStatus.ts
 src/models/LicenseSubscription.ts
 src/models/LicenseToken.ts
+src/models/ListPaddlePrices200Response.ts
 src/models/ListPolicyEventsTypeParameter.ts
 src/models/ListStripePrices200Response.ts
 src/models/LockMaxVersion.ts
@@ -196,6 +205,9 @@ src/models/ModelError.ts
 src/models/Mrr.ts
 src/models/MrrByIntervalInner.ts
 src/models/MrrByPolicyInner.ts
+src/models/PaddleIntegration.ts
+src/models/PaddlePermission.ts
+src/models/PaddlePrice.ts
 src/models/Pagination.ts
 src/models/Policy.ts
 src/models/PolicyDuration.ts

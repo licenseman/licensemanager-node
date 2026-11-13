@@ -8,8 +8,11 @@ Name | Type
 ------------ | -------------
 `id` | string
 `integrationId` | string
+`provider` | string
 `productId` | string
 `policyId` | string
+`externalProductId` | string
+`externalPriceId` | string
 `stripeProductId` | string
 `stripePriceId` | string
 `productName` | string
@@ -28,8 +31,11 @@ import type { IntegrationMapping } from '@licenseman/sdk'
 const example = {
   "id": g2Lk7RwPa,
   "integrationId": i8Fz4QnRt,
+  "provider": null,
   "productId": x7Kp2QaZ,
   "policyId": p4Rt8LmQ,
+  "externalProductId": prod_NWjs8kKbJWmuuc,
+  "externalPriceId": price_1MoBy5LkdIwHu7ix,
   "stripeProductId": prod_NWjs8kKbJWmuuc,
   "stripePriceId": price_1MoBy5LkdIwHu7ix,
   "productName": Acme Pro,

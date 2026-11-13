@@ -44,6 +44,10 @@ export interface Customer {
      */
     stripeCustomerId: string | null;
     /**
+     * Id of the Paddle customer, when the customer bought licenses through the Paddle integration. `null` otherwise.
+     */
+    paddleCustomerId: string | null;
+    /**
      * 
      */
     createdAt: Date;
@@ -59,6 +63,7 @@ export function instanceOfCustomer(value: object): value is Customer {
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('licenseCount' in value) || value['licenseCount'] === undefined) return false;
     if (!('stripeCustomerId' in value) || value['stripeCustomerId'] === undefined) return false;
+    if (!('paddleCustomerId' in value) || value['paddleCustomerId'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     return true;
 }
@@ -79,6 +84,7 @@ export function CustomerFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         'name': json['name'],
         'licenseCount': json['licenseCount'],
         'stripeCustomerId': json['stripeCustomerId'],
+        'paddleCustomerId': json['paddleCustomerId'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
     };
 }
@@ -100,6 +106,7 @@ export function CustomerToJSONTyped(value?: Customer | null, ignoreDiscriminator
         'name': value['name'],
         'licenseCount': value['licenseCount'],
         'stripeCustomerId': value['stripeCustomerId'],
+        'paddleCustomerId': value['paddleCustomerId'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
     };
 }

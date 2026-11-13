@@ -22,17 +22,26 @@ import {
 } from './Price.js';
 
 /**
- * The Stripe subscription keeping the license valid, `null` when it isn't a subscription license. The license expires when it stops being paid, includes every update, and can't be canceled during a money back guarantee.
+ * The Stripe or Paddle subscription keeping the license valid, `null` when it isn't a subscription license. The license expires when it stops being paid, includes every update, and can't be canceled during a money back guarantee.
  * @export
  * @interface LicenseSubscription
  */
 export interface LicenseSubscription {
     /**
-     * 
+     * Provider of the subscription.
+     */
+    provider: LicenseSubscriptionProviderEnum;
+    /**
+     * Id of the subscription in the provider: `sub_…` in Stripe and in Paddle.
+     */
+    externalId: string;
+    /**
+     * Deprecated: use `externalId`, which it equals.
+     * @deprecated
      */
     stripeSubscriptionId: string;
     /**
-     * Status of the subscription in Stripe: `active`, `trialing`, `past_due` while a failed payment is retried, `canceled`, `unpaid`, `paused`, `incomplete` or `incomplete_expired`.
+     * Status of the subscription in the provider. Stripe: `active`, `trialing`, `past_due` while a failed payment is retried, `canceled`, `unpaid`, `paused`, `incomplete` or `incomplete_expired`. Paddle: `active`, `trialing`, `past_due`, `paused` or `canceled`.
      */
     status: string;
     /**
@@ -69,6 +78,16 @@ export interface LicenseSubscription {
 /**
  * @export
  */
+export const LicenseSubscriptionProviderEnum = {
+    Stripe: 'stripe',
+    Paddle: 'paddle',
+    UnknownDefaultOpenApi: '11184809',
+} as const;
+export type LicenseSubscriptionProviderEnum = typeof LicenseSubscriptionProviderEnum[keyof typeof LicenseSubscriptionProviderEnum];
+
+/**
+ * @export
+ */
 export const LicenseSubscriptionIntervalEnum = {
     Day: 'day',
     Week: 'week',
@@ -83,6 +102,8 @@ export type LicenseSubscriptionIntervalEnum = typeof LicenseSubscriptionInterval
  * Check if a given object implements the LicenseSubscription interface.
  */
 export function instanceOfLicenseSubscription(value: object): value is LicenseSubscription {
+    if (!('provider' in value) || value['provider'] === undefined) return false;
+    if (!('externalId' in value) || value['externalId'] === undefined) return false;
     if (!('stripeSubscriptionId' in value) || value['stripeSubscriptionId'] === undefined) return false;
     if (!('status' in value) || value['status'] === undefined) return false;
     if (!('interval' in value) || value['interval'] === undefined) return false;
@@ -105,6 +126,8 @@ export function LicenseSubscriptionFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'provider': json['provider'],
+        'externalId': json['externalId'],
         'stripeSubscriptionId': json['stripeSubscriptionId'],
         'status': json['status'],
         'interval': json['interval'],
@@ -128,6 +151,8 @@ export function LicenseSubscriptionToJSONTyped(value?: LicenseSubscription | nul
 
     return {
         
+        'provider': value['provider'],
+        'externalId': value['externalId'],
         'stripeSubscriptionId': value['stripeSubscriptionId'],
         'status': value['status'],
         'interval': value['interval'],
