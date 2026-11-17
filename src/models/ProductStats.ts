@@ -48,6 +48,13 @@ import {
     CancellationStatsToJSON,
     CancellationStatsToJSONTyped,
 } from './CancellationStats.js';
+import type { ProductStatsActiveMachinesByCountryInner } from './ProductStatsActiveMachinesByCountryInner.js';
+import {
+    ProductStatsActiveMachinesByCountryInnerFromJSON,
+    ProductStatsActiveMachinesByCountryInnerFromJSONTyped,
+    ProductStatsActiveMachinesByCountryInnerToJSON,
+    ProductStatsActiveMachinesByCountryInnerToJSONTyped,
+} from './ProductStatsActiveMachinesByCountryInner.js';
 import type { ProductStatsNewLicensesByPolicyInner } from './ProductStatsNewLicensesByPolicyInner.js';
 import {
     ProductStatsNewLicensesByPolicyInnerFromJSON,
@@ -153,6 +160,10 @@ export interface ProductStats {
      * Number of active machines on each platform, from the one with the most machines.
      */
     activeMachinesByPlatform: Array<ProductStatsActiveMachinesByPlatformInner>;
+    /**
+     * Number of active machines in each country, from the one with the most machines.
+     */
+    activeMachinesByCountry: Array<ProductStatsActiveMachinesByCountryInner>;
 }
 
 /**
@@ -180,6 +191,7 @@ export function instanceOfProductStats(value: object): value is ProductStats {
     if (!('activationsByVersion' in value) || value['activationsByVersion'] === undefined) return false;
     if (!('activeMachinesByVersion' in value) || value['activeMachinesByVersion'] === undefined) return false;
     if (!('activeMachinesByPlatform' in value) || value['activeMachinesByPlatform'] === undefined) return false;
+    if (!('activeMachinesByCountry' in value) || value['activeMachinesByCountry'] === undefined) return false;
     return true;
 }
 
@@ -214,6 +226,7 @@ export function ProductStatsFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'activationsByVersion': ((json['activationsByVersion'] as Array<any>).map(ProductStatsActivationsByVersionInnerFromJSON)),
         'activeMachinesByVersion': ((json['activeMachinesByVersion'] as Array<any>).map(ProductStatsActiveMachinesByVersionInnerFromJSON)),
         'activeMachinesByPlatform': ((json['activeMachinesByPlatform'] as Array<any>).map(ProductStatsActiveMachinesByPlatformInnerFromJSON)),
+        'activeMachinesByCountry': ((json['activeMachinesByCountry'] as Array<any>).map(ProductStatsActiveMachinesByCountryInnerFromJSON)),
     };
 }
 
@@ -249,6 +262,7 @@ export function ProductStatsToJSONTyped(value?: ProductStats | null, ignoreDiscr
         'activationsByVersion': ((value['activationsByVersion'] as Array<any>).map(ProductStatsActivationsByVersionInnerToJSON)),
         'activeMachinesByVersion': ((value['activeMachinesByVersion'] as Array<any>).map(ProductStatsActiveMachinesByVersionInnerToJSON)),
         'activeMachinesByPlatform': ((value['activeMachinesByPlatform'] as Array<any>).map(ProductStatsActiveMachinesByPlatformInnerToJSON)),
+        'activeMachinesByCountry': ((value['activeMachinesByCountry'] as Array<any>).map(ProductStatsActiveMachinesByCountryInnerToJSON)),
     };
 }
 

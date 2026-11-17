@@ -15,6 +15,9 @@ Name | Type
 `version` | string
 `overriddenByMachineId` | string
 `lastValidatedAt` | Date
+`country` | string
+`latitude` | number
+`longitude` | number
 `createdAt` | Date
 `updatedAt` | Date
 
@@ -34,6 +37,9 @@ const example = {
   "version": 1.4.2,
   "overriddenByMachineId": null,
   "lastValidatedAt": 2026-01-15T09:30:00.000Z,
+  "country": FR,
+  "latitude": 48.8566,
+  "longitude": 2.3522,
   "createdAt": 2026-01-15T09:30:00.000Z,
   "updatedAt": 2026-01-15T09:30:00.000Z,
 } satisfies Machine

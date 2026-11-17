@@ -1,0 +1,56 @@
+
+# ImportLicense
+
+
+## Properties
+
+Name | Type
+------------ | -------------
+`email` | string
+`key` | string
+`policyId` | string
+`expiresAt` | Date
+`meta` | { [key: string]: any | null; }
+`maxMachines` | number
+`maxOfflineDurationSeconds` | number
+`price` | [PriceInput](PriceInput.md)
+`maxVersion` | [LicenseMaxVersionInput](LicenseMaxVersionInput.md)
+`cancellableUntil` | Date
+`name` | string
+`subscription` | [ImportLicenseSubscription](ImportLicenseSubscription.md)
+
+## Example
+
+```typescript
+import type { ImportLicense } from '@licenseman/sdk'
+
+// TODO: Update the object below with actual values
+const example = {
+  "email": jane@example.com,
+  "key": 7KQ2M-X9ZPA-H4TRC-WN6EY-B3JDF,
+  "policyId": p4Rt8LmQ,
+  "expiresAt": 2027-01-15T09:30:00.000Z,
+  "meta": {seats=5},
+  "maxMachines": 3,
+  "maxOfflineDurationSeconds": 604800,
+  "price": null,
+  "maxVersion": null,
+  "cancellableUntil": 2026-02-14T09:30:00.000Z,
+  "name": Jane Doe,
+  "subscription": null,
+} satisfies ImportLicense
+
+console.log(example)
+
+// Convert the instance to a JSON string
+const exampleJSON: string = JSON.stringify(example)
+console.log(exampleJSON)
+
+// Parse the JSON string back to an object
+const exampleParsed = JSON.parse(exampleJSON) as ImportLicense
+console.log(exampleParsed)
+```
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+

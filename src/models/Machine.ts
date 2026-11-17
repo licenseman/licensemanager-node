@@ -56,6 +56,18 @@ export interface Machine {
      */
     lastValidatedAt: Date | null;
     /**
+     * ISO 3166-1 alpha-2 code of the country of the IP address the license was last successfully validated from on the machine. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    country: string | null;
+    /**
+     * Approximate latitude of the IP address the license was last successfully validated from on the machine. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    latitude: number | null;
+    /**
+     * Approximate longitude of the IP address the license was last successfully validated from on the machine. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    longitude: number | null;
+    /**
      * 
      */
     createdAt: Date;
@@ -91,6 +103,9 @@ export function instanceOfMachine(value: object): value is Machine {
     if (!('version' in value) || value['version'] === undefined) return false;
     if (!('overriddenByMachineId' in value) || value['overriddenByMachineId'] === undefined) return false;
     if (!('lastValidatedAt' in value) || value['lastValidatedAt'] === undefined) return false;
+    if (!('country' in value) || value['country'] === undefined) return false;
+    if (!('latitude' in value) || value['latitude'] === undefined) return false;
+    if (!('longitude' in value) || value['longitude'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
     if (!('updatedAt' in value) || value['updatedAt'] === undefined) return false;
     return true;
@@ -115,6 +130,9 @@ export function MachineFromJSONTyped(json: any, ignoreDiscriminator: boolean): M
         'version': json['version'],
         'overriddenByMachineId': json['overriddenByMachineId'],
         'lastValidatedAt': (json['lastValidatedAt'] == null ? null : parseDateTime(json['lastValidatedAt'])),
+        'country': json['country'],
+        'latitude': json['latitude'],
+        'longitude': json['longitude'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
         'updatedAt': (json['updatedAt'] == null ? json['updatedAt'] : parseDateTime(json['updatedAt'])),
     };
@@ -140,6 +158,9 @@ export function MachineToJSONTyped(value?: Machine | null, ignoreDiscriminator: 
         'version': value['version'],
         'overriddenByMachineId': value['overriddenByMachineId'],
         'lastValidatedAt': value['lastValidatedAt'] == null ? value['lastValidatedAt'] : serializeDateTime(value['lastValidatedAt']),
+        'country': value['country'],
+        'latitude': value['latitude'],
+        'longitude': value['longitude'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),
         'updatedAt': value['updatedAt'] == null ? value['updatedAt'] : serializeDateTime(value['updatedAt']),
     };

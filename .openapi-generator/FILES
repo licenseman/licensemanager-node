@@ -38,6 +38,12 @@ docs/EventMachine.md
 docs/EventType.md
 docs/EventsApi.md
 docs/FixedMaxVersion.md
+docs/ImportLicense.md
+docs/ImportLicenseResult.md
+docs/ImportLicenseResultError.md
+docs/ImportLicenseSubscription.md
+docs/ImportLicenses.md
+docs/ImportLicensesResult.md
 docs/Integration.md
 docs/IntegrationMapping.md
 docs/IntegrationMappingRecurring.md
@@ -95,6 +101,7 @@ docs/Product.md
 docs/ProductList.md
 docs/ProductStats.md
 docs/ProductStatsActivationsByVersionInner.md
+docs/ProductStatsActiveMachinesByCountryInner.md
 docs/ProductStatsActiveMachinesByPlatformInner.md
 docs/ProductStatsActiveMachinesByVersionInner.md
 docs/ProductStatsNewLicensesByPolicyInner.md
@@ -176,6 +183,12 @@ src/models/EventList.ts
 src/models/EventMachine.ts
 src/models/EventType.ts
 src/models/FixedMaxVersion.ts
+src/models/ImportLicense.ts
+src/models/ImportLicenseResult.ts
+src/models/ImportLicenseResultError.ts
+src/models/ImportLicenseSubscription.ts
+src/models/ImportLicenses.ts
+src/models/ImportLicensesResult.ts
 src/models/Integration.ts
 src/models/IntegrationMapping.ts
 src/models/IntegrationMappingRecurring.ts
@@ -228,6 +241,7 @@ src/models/Product.ts
 src/models/ProductList.ts
 src/models/ProductStats.ts
 src/models/ProductStatsActivationsByVersionInner.ts
+src/models/ProductStatsActiveMachinesByCountryInner.ts
 src/models/ProductStatsActiveMachinesByPlatformInner.ts
 src/models/ProductStatsActiveMachinesByVersionInner.ts
 src/models/ProductStatsNewLicensesByPolicyInner.ts

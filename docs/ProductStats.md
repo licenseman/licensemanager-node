@@ -27,6 +27,7 @@ Name | Type
 `activationsByVersion` | [Array&lt;ProductStatsActivationsByVersionInner&gt;](ProductStatsActivationsByVersionInner.md)
 `activeMachinesByVersion` | [Array&lt;ProductStatsActiveMachinesByVersionInner&gt;](ProductStatsActiveMachinesByVersionInner.md)
 `activeMachinesByPlatform` | [Array&lt;ProductStatsActiveMachinesByPlatformInner&gt;](ProductStatsActiveMachinesByPlatformInner.md)
+`activeMachinesByCountry` | [Array&lt;ProductStatsActiveMachinesByCountryInner&gt;](ProductStatsActiveMachinesByCountryInner.md)
 
 ## Example
 
@@ -56,6 +57,7 @@ const example = {
   "activationsByVersion": null,
   "activeMachinesByVersion": null,
   "activeMachinesByPlatform": null,
+  "activeMachinesByCountry": null,
 } satisfies ProductStats
 
 console.log(example)

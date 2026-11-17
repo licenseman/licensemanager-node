@@ -15,6 +15,9 @@ Name | Type
 `machineId` | string
 `machine` | [EventMachine](EventMachine.md)
 `actor` | [EventActor](EventActor.md)
+`country` | string
+`latitude` | number
+`longitude` | number
 
 ## Example
 
@@ -32,6 +35,9 @@ const example = {
   "machineId": m9Tq3VhD,
   "machine": null,
   "actor": null,
+  "country": FR,
+  "latitude": 48.8566,
+  "longitude": 2.3522,
 } satisfies Event
 
 console.log(example)

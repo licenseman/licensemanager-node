@@ -24,6 +24,16 @@ import {
     CreateLicenseToJSON,
 } from '../models/CreateLicense.js';
 import {
+    type ImportLicenses,
+    ImportLicensesFromJSON,
+    ImportLicensesToJSON,
+} from '../models/ImportLicenses.js';
+import {
+    type ImportLicensesResult,
+    ImportLicensesResultFromJSON,
+    ImportLicensesResultToJSON,
+} from '../models/ImportLicensesResult.js';
+import {
     type License,
     LicenseFromJSON,
     LicenseToJSON,
@@ -115,6 +125,17 @@ export interface GetLicenseStatsRequest {
      * 
      */
     id: string;
+}
+
+export interface ImportLicensesRequest {
+    /**
+     * 
+     */
+    productId: string;
+    /**
+     * 
+     */
+    importLicenses: ImportLicenses;
 }
 
 export interface ListCustomerLicensesRequest {
@@ -675,6 +696,67 @@ export class LicensesApi extends runtime.BaseAPI {
      */
     async getSigningKey(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SigningKey> {
         const response = await this.getSigningKeyRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for importLicenses without sending the request
+     */
+    async importLicensesRequestOpts(requestParameters: ImportLicensesRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['productId'] == null) {
+            throw new runtime.RequiredError(
+                'productId',
+                'Required parameter "productId" was null or undefined when calling importLicenses().'
+            );
+        }
+
+        if (requestParameters['importLicenses'] == null) {
+            throw new runtime.RequiredError(
+                'importLicenses',
+                'Required parameter "importLicenses" was null or undefined when calling importLicenses().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKey authentication
+        }
+
+
+        let urlPath = `/v1/products/{productId}/licenses/import`;
+        urlPath = urlPath.replace('{productId}', encodeURIComponent(String(requestParameters['productId'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ImportLicensesToJSON(requestParameters['importLicenses']),
+        };
+    }
+
+    /**
+     * Creates up to 500 licenses with their current keys, like when moving from another license manager or Lemon Squeezy, in one request. Each license is created like with `createLicense`, which describes the defaults, and never emails its key. The licenses are imported one by one: one that fails doesn\'t stop the others, and the response tells the result of each.  A key already used by a license of the product is skipped, so an interrupted import can be sent again.  With a `subscription`, the license is kept valid by the Stripe or Paddle subscription, rather than one created by its next payment.  **Required role permission**: `license:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Import licenses
+     */
+    async importLicensesRaw(requestParameters: ImportLicensesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportLicensesResult>> {
+        const requestOptions = await this.importLicensesRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImportLicensesResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Creates up to 500 licenses with their current keys, like when moving from another license manager or Lemon Squeezy, in one request. Each license is created like with `createLicense`, which describes the defaults, and never emails its key. The licenses are imported one by one: one that fails doesn\'t stop the others, and the response tells the result of each.  A key already used by a license of the product is skipped, so an interrupted import can be sent again.  With a `subscription`, the license is kept valid by the Stripe or Paddle subscription, rather than one created by its next payment.  **Required role permission**: `license:create` when called with a session, granted by the member\'s role. API keys aren\'t limited by roles.
+     * Import licenses
+     */
+    async importLicenses(requestParameters: ImportLicensesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImportLicensesResult> {
+        const response = await this.importLicensesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

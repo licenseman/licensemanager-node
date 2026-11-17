@@ -77,6 +77,18 @@ export interface Event {
      * 
      */
     actor: EventActor | null;
+    /**
+     * ISO 3166-1 alpha-2 code of the country of the IP address the request came from, for `license.validated` and `license.validation_failed` events. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    country: string | null;
+    /**
+     * Approximate latitude of the IP address the request came from, for `license.validated` and `license.validation_failed` events. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    latitude: number | null;
+    /**
+     * Approximate longitude of the IP address the request came from, for `license.validated` and `license.validation_failed` events. `null` until it's looked up, shortly after, or when it can't be.
+     */
+    longitude: number | null;
 }
 
 
@@ -94,6 +106,9 @@ export function instanceOfEvent(value: object): value is Event {
     if (!('machineId' in value) || value['machineId'] === undefined) return false;
     if (!('machine' in value) || value['machine'] === undefined) return false;
     if (!('actor' in value) || value['actor'] === undefined) return false;
+    if (!('country' in value) || value['country'] === undefined) return false;
+    if (!('latitude' in value) || value['latitude'] === undefined) return false;
+    if (!('longitude' in value) || value['longitude'] === undefined) return false;
     return true;
 }
 
@@ -116,6 +131,9 @@ export function EventFromJSONTyped(json: any, ignoreDiscriminator: boolean): Eve
         'machineId': json['machineId'],
         'machine': EventMachineFromJSON(json['machine']),
         'actor': EventActorFromJSON(json['actor']),
+        'country': json['country'],
+        'latitude': json['latitude'],
+        'longitude': json['longitude'],
     };
 }
 
@@ -139,6 +157,9 @@ export function EventToJSONTyped(value?: Event | null, ignoreDiscriminator: bool
         'machineId': value['machineId'],
         'machine': EventMachineToJSON(value['machine']),
         'actor': EventActorToJSON(value['actor']),
+        'country': value['country'],
+        'latitude': value['latitude'],
+        'longitude': value['longitude'],
     };
 }
 
