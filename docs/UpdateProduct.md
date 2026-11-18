@@ -8,6 +8,8 @@ Name | Type
 ------------ | -------------
 `name` | string
 `slug` | string
+`websiteUrl` | string
+`downloadUrl` | string
 `portal` | [UpdateProductPortal](UpdateProductPortal.md)
 `autoMachineChange` | boolean
 
@@ -20,6 +22,8 @@ import type { UpdateProduct } from '@licenseman/sdk'
 const example = {
   "name": Acme Pro,
   "slug": acme-pro,
+  "websiteUrl": https://example.com,
+  "downloadUrl": https://example.com/download,
   "portal": null,
   "autoMachineChange": true,
 } satisfies UpdateProduct

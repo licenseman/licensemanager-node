@@ -11,6 +11,8 @@ Name | Type
 `name` | string
 `isTestFromProductId` | string
 `logoUrl` | string
+`websiteUrl` | string
+`downloadUrl` | string
 `portal` | [PortalSettings](PortalSettings.md)
 `autoMachineChange` | boolean
 `createdAt` | Date
@@ -28,6 +30,8 @@ const example = {
   "name": Acme Pro,
   "isTestFromProductId": null,
   "logoUrl": https://cdn.example.com/logos/x7Kp2QaZ/k3f9a2LpQ7xw.webp,
+  "websiteUrl": https://example.com,
+  "downloadUrl": https://example.com/download,
   "portal": null,
   "autoMachineChange": true,
   "createdAt": 2026-01-15T09:30:00.000Z,

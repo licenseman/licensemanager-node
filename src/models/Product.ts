@@ -48,6 +48,14 @@ export interface Product {
      */
     logoUrl: string | null;
     /**
+     * The product's website, linked from the customer portal, when its URL has no allowed `return_url`, and from the emails sent to customers. `null` for no link.
+     */
+    websiteUrl: string | null;
+    /**
+     * Where customers download the product, linked from the email sending their license keys. `null` for no link.
+     */
+    downloadUrl: string | null;
+    /**
      * 
      */
     portal: PortalSettings;
@@ -74,6 +82,8 @@ export function instanceOfProduct(value: object): value is Product {
     if (!('name' in value) || value['name'] === undefined) return false;
     if (!('isTestFromProductId' in value) || value['isTestFromProductId'] === undefined) return false;
     if (!('logoUrl' in value) || value['logoUrl'] === undefined) return false;
+    if (!('websiteUrl' in value) || value['websiteUrl'] === undefined) return false;
+    if (!('downloadUrl' in value) || value['downloadUrl'] === undefined) return false;
     if (!('portal' in value) || value['portal'] === undefined) return false;
     if (!('autoMachineChange' in value) || value['autoMachineChange'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
@@ -96,6 +106,8 @@ export function ProductFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'name': json['name'],
         'isTestFromProductId': json['isTestFromProductId'],
         'logoUrl': json['logoUrl'],
+        'websiteUrl': json['websiteUrl'],
+        'downloadUrl': json['downloadUrl'],
         'portal': PortalSettingsFromJSON(json['portal']),
         'autoMachineChange': json['autoMachineChange'],
         'createdAt': (json['createdAt'] == null ? json['createdAt'] : parseDateTime(json['createdAt'])),
@@ -119,6 +131,8 @@ export function ProductToJSONTyped(value?: Product | null, ignoreDiscriminator: 
         'name': value['name'],
         'isTestFromProductId': value['isTestFromProductId'],
         'logoUrl': value['logoUrl'],
+        'websiteUrl': value['websiteUrl'],
+        'downloadUrl': value['downloadUrl'],
         'portal': PortalSettingsToJSON(value['portal']),
         'autoMachineChange': value['autoMachineChange'],
         'createdAt': value['createdAt'] == null ? value['createdAt'] : serializeDateTime(value['createdAt']),

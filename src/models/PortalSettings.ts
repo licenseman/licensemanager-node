@@ -32,11 +32,7 @@ export interface PortalSettings {
      */
     accentColor: string | null;
     /**
-     * Link back to your website shown in the portal, when the portal's URL has no allowed `return_url`. `null` for no link.
-     */
-    returnUrl: string | null;
-    /**
-     * Domains the portal's `return_url` query parameter may point to, their subdomains included. Other return URLs are ignored, in favor of `returnUrl`.
+     * Domains the portal's `return_url` query parameter may point to, their subdomains included. Other return URLs are ignored, in favor of the product's `websiteUrl`.
      */
     returnDomains: Array<string>;
 }
@@ -48,7 +44,6 @@ export function instanceOfPortalSettings(value: object): value is PortalSettings
     if (!('enabled' in value) || value['enabled'] === undefined) return false;
     if (!('brandColor' in value) || value['brandColor'] === undefined) return false;
     if (!('accentColor' in value) || value['accentColor'] === undefined) return false;
-    if (!('returnUrl' in value) || value['returnUrl'] === undefined) return false;
     if (!('returnDomains' in value) || value['returnDomains'] === undefined) return false;
     return true;
 }
@@ -66,7 +61,6 @@ export function PortalSettingsFromJSONTyped(json: any, ignoreDiscriminator: bool
         'enabled': json['enabled'],
         'brandColor': json['brandColor'],
         'accentColor': json['accentColor'],
-        'returnUrl': json['returnUrl'],
         'returnDomains': json['returnDomains'],
     };
 }
@@ -85,7 +79,6 @@ export function PortalSettingsToJSONTyped(value?: PortalSettings | null, ignoreD
         'enabled': value['enabled'],
         'brandColor': value['brandColor'],
         'accentColor': value['accentColor'],
-        'returnUrl': value['returnUrl'],
         'returnDomains': value['returnDomains'],
     };
 }

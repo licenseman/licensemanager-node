@@ -9,7 +9,6 @@ Name | Type
 `enabled` | boolean
 `brandColor` | string
 `accentColor` | string
-`returnUrl` | string
 `returnDomains` | Array&lt;string&gt;
 
 ## Example
@@ -22,7 +21,6 @@ const example = {
   "enabled": true,
   "brandColor": #1e3a8a,
   "accentColor": #2563eb,
-  "returnUrl": https://example.com/account,
   "returnDomains": [example.com],
 } satisfies PortalSettings
 

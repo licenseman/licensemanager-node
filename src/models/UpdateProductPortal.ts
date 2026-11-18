@@ -32,11 +32,7 @@ export interface UpdateProductPortal {
      */
     accentColor?: string | null;
     /**
-     * Link back to your website shown in the portal, when the portal's URL has no allowed `return_url`. `null` for no link.
-     */
-    returnUrl?: string | null;
-    /**
-     * Domains the portal's `return_url` query parameter may point to, their subdomains included. Other return URLs are ignored, in favor of `returnUrl`.
+     * Domains the portal's `return_url` query parameter may point to, their subdomains included. Other return URLs are ignored, in favor of the product's `websiteUrl`.
      */
     returnDomains?: Array<string>;
 }
@@ -61,7 +57,6 @@ export function UpdateProductPortalFromJSONTyped(json: any, ignoreDiscriminator:
         'enabled': json['enabled'] == null ? undefined : json['enabled'],
         'brandColor': json['brandColor'] === undefined ? undefined : json['brandColor'] === null ? null : json['brandColor'],
         'accentColor': json['accentColor'] === undefined ? undefined : json['accentColor'] === null ? null : json['accentColor'],
-        'returnUrl': json['returnUrl'] === undefined ? undefined : json['returnUrl'] === null ? null : json['returnUrl'],
         'returnDomains': json['returnDomains'] == null ? undefined : json['returnDomains'],
     };
 }
@@ -80,7 +75,6 @@ export function UpdateProductPortalToJSONTyped(value?: UpdateProductPortal | nul
         'enabled': value['enabled'],
         'brandColor': value['brandColor'],
         'accentColor': value['accentColor'],
-        'returnUrl': value['returnUrl'],
         'returnDomains': value['returnDomains'],
     };
 }

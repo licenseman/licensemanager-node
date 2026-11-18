@@ -40,7 +40,7 @@ export interface CreateProductWithPolicy {
      */
     defaultPolicy?: PolicySettings;
     /**
-     * Creates a test product: a sandbox of this live product of the organization, starting with copies of its policies, releases, portal settings and `autoMachineChange`.
+     * Creates a test product: a sandbox of this live product of the organization, starting with copies of its policies, releases, `websiteUrl`, `downloadUrl`, portal settings and `autoMachineChange`.
      */
     isTestFromProductId?: string;
 }

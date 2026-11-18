@@ -44,7 +44,7 @@ export interface Portal {
      */
     accentColor: string | null;
     /**
-     * Link back to the product's website: the requested `returnUrl` when its domain is allowed, the product's default return link otherwise. `null` for no link.
+     * Link back to the product's website: the requested `returnUrl` when its domain is allowed, the product's website otherwise. `null` for no link.
      */
     returnUrl: string | null;
 }

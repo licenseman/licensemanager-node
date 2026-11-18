@@ -36,6 +36,14 @@ export interface UpdateProduct {
      */
     slug?: string;
     /**
+     * The product's website, linked from the customer portal, when its URL has no allowed `return_url`, and from the emails sent to customers. `null` for no link.
+     */
+    websiteUrl?: string | null;
+    /**
+     * Where customers download the product, linked from the email sending their license keys. `null` for no link.
+     */
+    downloadUrl?: string | null;
+    /**
      * 
      */
     portal?: UpdateProductPortal;
@@ -64,6 +72,8 @@ export function UpdateProductFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'name': json['name'] == null ? undefined : json['name'],
         'slug': json['slug'] == null ? undefined : json['slug'],
+        'websiteUrl': json['websiteUrl'] === undefined ? undefined : json['websiteUrl'] === null ? null : json['websiteUrl'],
+        'downloadUrl': json['downloadUrl'] === undefined ? undefined : json['downloadUrl'] === null ? null : json['downloadUrl'],
         'portal': json['portal'] == null ? undefined : UpdateProductPortalFromJSON(json['portal']),
         'autoMachineChange': json['autoMachineChange'] == null ? undefined : json['autoMachineChange'],
     };
@@ -82,6 +92,8 @@ export function UpdateProductToJSONTyped(value?: UpdateProduct | null, ignoreDis
         
         'name': value['name'],
         'slug': value['slug'],
+        'websiteUrl': value['websiteUrl'],
+        'downloadUrl': value['downloadUrl'],
         'portal': UpdateProductPortalToJSON(value['portal']),
         'autoMachineChange': value['autoMachineChange'],
     };
